@@ -943,3 +943,20 @@ body::before {
     scroll-margin-top: 52px;
   }
 }
+
+/* ── My duty navigation UX v1 ── */
+.my-duty-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  #my-duty {
+    scroll-margin-top: 48px;
+  }
+
+  .hero .search-card {
+    scroll-margin-top: 64px;
+  }
+}

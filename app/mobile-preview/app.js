@@ -177,6 +177,9 @@ const nameInput = document.getElementById("name-input");
 const summaryCard = document.getElementById("summary-card");
 const chartCardSlot = document.getElementById("chart-card-slot");
 const historySection = document.getElementById("history-section");
+const myDutySection = document.getElementById("my-duty");
+const myDutyNav = document.getElementById("my-duty-nav");
+const searchCard = document.querySelector(".hero .search-card");
 
 const uniqueNames = [...new Set(DUTY_DATA.map((r) => r.name))].sort();
 const overallAvgCount = DUTY_DATA.length / uniqueNames.length;
@@ -242,14 +245,32 @@ function wireChartTooltip() {
 }
 
 let highlightedName = null;
+let matchedName = null;
 
 const emptySummary = '<p class="dash-empty">이름을 검색하면 총 당직 횟수와 평균 대비가 여기 표시됩니다.</p>';
 const emptyChart = '<p class="dash-empty">이름을 검색하면 월별 당직 그래프가 여기 표시됩니다.</p>';
+
+myDutyNav.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  if (matchedName) {
+    myDutySection.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+
+  if (searchCard) {
+    searchCard.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+  window.setTimeout(() => {
+    nameInput.focus({ preventScroll: true });
+  }, 280);
+});
 
 nameInput.addEventListener("input", () => {
   const name = nameInput.value.trim();
   highlightedName = name || null;
   if (!name) {
+    matchedName = null;
     summaryCard.innerHTML = emptySummary;
     chartCardSlot.innerHTML = emptyChart;
     historySection.innerHTML = "";
@@ -259,6 +280,7 @@ nameInput.addEventListener("input", () => {
   }
   const records = DUTY_DATA.filter((r) => r.name === name);
   if (records.length === 0) {
+    matchedName = null;
     summaryCard.innerHTML = '<p class="dash-empty">해당 이름의 당직 기록이 없습니다.</p>';
     chartCardSlot.innerHTML = emptyChart;
     historySection.innerHTML = "";
@@ -266,17 +288,17 @@ nameInput.addEventListener("input", () => {
     window.focusCalendarOnPerson(null);
     return;
   }
+  matchedName = name;
   window.focusCalendarOnPerson(name);
 
-  // 모바일에서는 키보드가 열린 상태에서 scrollIntoView가 가시 영역을 잘못 계산할 수 있다.
-  // 정확한 이름이 검색되면 키보드를 닫은 뒤 캘린더 섹션을 화면 상단으로 이동한다.
+  // 정확한 이름이 검색되면 키보드를 닫고 개인 당직 영역으로 이동한다.
+  // 캘린더의 최근 당직일 하이라이트는 그대로 유지된다.
   if (document.activeElement === nameInput) {
     nameInput.blur();
   }
   window.setTimeout(() => {
-    const calendarSection = document.getElementById("calendar");
-    if (calendarSection) {
-      calendarSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (myDutySection) {
+      myDutySection.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, 260);
 

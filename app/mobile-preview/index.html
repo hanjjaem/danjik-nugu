@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>당직누구</title>
-<link rel="stylesheet" href="style.css?v=20260923-anchoroffset1">
+<link rel="stylesheet" href="style.css?v=20260923-mydutyux1">
 </head>
 <body>
 <header class="navbar">
 <nav class="navbar-tabs">
     <a href="#today">오늘 당직</a>
     <a href="#calendar">당직 일정</a>
-    <a href="#dashboard">당직 일정</a>
+    <a href="#my-duty" id="my-duty-nav">내 당직</a>
     <a href="#stats">당직 통계</a>
   </nav>
 </header>
@@ -60,16 +60,18 @@
     </div>
   </section>
 
-  <div class="dash-row">
-    <div class="dash-card" id="summary-card">
-      <p class="dash-empty">이름을 검색하면 총 당직 횟수와 평균 대비가 여기 표시됩니다.</p>
+  <section id="my-duty" class="dash-section my-duty-section" aria-label="내 당직">
+    <div class="dash-row">
+      <div class="dash-card" id="summary-card">
+        <p class="dash-empty">이름을 검색하면 총 당직 횟수와 평균 대비가 여기 표시됩니다.</p>
+      </div>
+      <div class="dash-card" id="chart-card-slot">
+        <p class="dash-empty">이름을 검색하면 월별 당직 그래프가 여기 표시됩니다.</p>
+      </div>
     </div>
-    <div class="dash-card" id="chart-card-slot">
-      <p class="dash-empty">이름을 검색하면 월별 당직 그래프가 여기 표시됩니다.</p>
-    </div>
-  </div>
 
-  <div id="history-section"></div>
+    <div id="history-section"></div>
+  </section>
 
   <section id="stats" class="dash-section">
     <div class="dash-section__head">
@@ -89,7 +91,7 @@
 </main>
 
 <script src="../data.js?v=20260923-1805"></script>
-<script src="app.js?v=20260923-searchscroll1"></script>
+<script src="app.js?v=20260923-mydutyux1"></script>
 </body>
 </html>
 
