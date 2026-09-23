@@ -912,3 +912,10 @@ body::before {
     font-size: 10px;
   }
 }
+
+/* ── Mobile three-item navbar v1 ── */
+@media (max-width: 640px) {
+  .navbar-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
