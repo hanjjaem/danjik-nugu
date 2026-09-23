@@ -25,6 +25,4 @@ python -m http.server 8000 --directory app
 
 브라우저에서 <http://localhost:8000>을 엽니다.
 
-[제작 일지 읽기](docs/blog/2026-09-23-duty-nugu.md)
-
 </details>
