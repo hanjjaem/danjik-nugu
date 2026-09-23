@@ -277,6 +277,9 @@ body::before {
   .hero {
     min-height: 320px;
     background-position: center;
+    background-size: 112% auto;
+    background-repeat: no-repeat;
+    background-color: #0b1426;
   }
 
   .hero-content {
