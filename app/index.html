@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>당직누구</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="navbar">
+  <div class="brand">
+    <div class="brand-mark">🌙</div>
+    <span>당직 누구?</span>
+  </div>
+  <nav class="navbar-tabs">
+    <a href="#today">오늘의 당직</a>
+    <a href="#calendar">당직 일정</a>
+    <a href="#dashboard">내 통계</a>
+    <a href="#stats">전체 통계</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">부산광역시 동구 · 오늘도 동구를 지키는 당신이 있습니다</p>
+    <h1 class="hero-title">당직 누구?</h1>
+    <p class="hero-sub">이름을 검색하면 당직 이력과 통계를 보여드려요</p>
+    <div class="search-card">
+      <input list="name-list" id="name-input" placeholder="이름 검색 (예: 김도형)" aria-label="이름 검색">
+      <datalist id="name-list"></datalist>
+    </div>
+    <div class="hero-badges">
+      <a href="#today">🕐 오늘</a>
+      <a href="#dashboard">📋 내 당직 이력</a>
+      <a href="#calendar">📅 이번 주 당직</a>
+      <a href="#stats">📊 전체 통계</a>
+    </div>
+  </div>
+</section>
+
+<main class="dashboard" id="dashboard">
+  <section id="today" class="dash-section">
+    <div class="dash-section__head">
+      <h2>오늘의 당직</h2>
+      <span class="today-date" id="today-date"></span>
+    </div>
+    <div id="today-card"></div>
+  </section>
+
+  <section id="calendar" class="dash-section">
+    <div class="dash-section__head">
+      <h2>당직 일정</h2>
+      <div class="cal-nav">
+        <button type="button" id="cal-prev" aria-label="이전 달">‹</button>
+        <span id="cal-label"></span>
+        <button type="button" id="cal-next" aria-label="다음 달">›</button>
+        <button type="button" id="cal-today-btn">오늘로</button>
+      </div>
+    </div>
+    <div class="cal-wrap">
+      <div id="calendar-grid"></div>
+      <div class="cal-tooltip" id="cal-tooltip"></div>
+    </div>
+  </section>
+
+  <div class="dash-row">
+    <div class="dash-card" id="summary-card">
+      <p class="dash-empty">이름을 검색하면 총 당직 횟수와 평균 대비가 여기 표시됩니다.</p>
+    </div>
+    <div class="dash-card" id="chart-card-slot">
+      <p class="dash-empty">이름을 검색하면 월별 당직 그래프가 여기 표시됩니다.</p>
+    </div>
+  </div>
+
+  <div id="history-section"></div>
+
+  <section id="stats" class="dash-section">
+    <div class="dash-section__head">
+      <h2>전체 텀 통계</h2>
+      <label class="stats-filter">
+        직책 필터
+        <select id="role-filter">
+          <option value="당직사령">당직사령</option>
+          <option value="전체">전체</option>
+          <option value="당직원">당직원</option>
+          <option value="당직원(방재)">당직원(방재)</option>
+          <option value="당직원(재택)">당직원(재택)</option>
+        </select>
+      </label>
+    </div>
+    <div id="stats-table"></div>
+  </section>
+
+  <p class="foot">당직근무 명단 데이터를 기반으로 합니다. 최종 확인은 원본 명단으로.</p>
+</main>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
