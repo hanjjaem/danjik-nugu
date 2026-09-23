@@ -1,0 +1,441 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css");
+
+:root {
+  --bg1: #fbfcff;
+  --bg2: #f1f6ff;
+  --ink: #111827;
+  --muted: #667085;
+  --line: rgba(17, 24, 39, .10);
+  --blue: #2563eb;
+  --purple: #7c3aed;
+  --shadow: 0 30px 90px rgba(28, 45, 74, .13);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { min-height: 100%; }
+body {
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 12% 14%, rgba(52, 120, 246, .18), transparent 28%),
+    radial-gradient(circle at 86% 20%, rgba(184, 92, 246, .16), transparent 30%),
+    radial-gradient(circle at 54% 92%, rgba(22, 163, 74, .08), transparent 34%),
+    linear-gradient(145deg, var(--bg1) 0%, var(--bg2) 100%);
+  background-repeat: no-repeat;
+  overflow-x: hidden;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.xl { word-break: normal; }
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1;
+  background-image: linear-gradient(rgba(16, 35, 63, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 35, 63, .035) 1px, transparent 1px);
+  background-size: 42px 42px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 16%, black 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 16%, black 72%, transparent 100%);
+  pointer-events: none;
+}
+
+.navbar {
+  position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 14px clamp(16px, 4vw, 32px); background: rgba(255, 255, 255, .78);
+  backdrop-filter: blur(16px); border-bottom: 1px solid rgba(17, 24, 39, .08);
+}
+.brand { display: flex; align-items: center; gap: 10px; color: #1f2c44; font-size: 15px; font-weight: 900; letter-spacing: -.02em; }
+.brand-mark {
+  width: 32px; height: 32px; border-radius: 11px; display: grid; place-items: center;
+  color: #fff; font-weight: 900; font-size: 15px; letter-spacing: -.04em;
+  background: linear-gradient(135deg, var(--ink), #2563eb);
+  box-shadow: 0 10px 24px rgba(52, 120, 246, .28);
+}
+.navbar-tabs { display: flex; gap: clamp(14px, 3vw, 28px); }
+.navbar-tabs a { color: #5a6b88; font-size: 13.5px; font-weight: 800; text-decoration: none; letter-spacing: -.01em; }
+.navbar-tabs a:hover { color: #2563eb; }
+
+/* ── 히어로 ── */
+.hero {
+  position: relative; min-height: 400px; display: flex; align-items: center; justify-content: center;
+  background: url("../hero.png") center / cover no-repeat; overflow: hidden;
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(10, 16, 32, .32) 0%, rgba(10, 16, 32, .5) 55%, rgba(10, 16, 32, .78) 100%);
+}
+.hero-content { position: relative; z-index: 1; width: min(100%, 640px); padding: 48px 20px; text-align: center; color: #fff; }
+.hero-eyebrow { font-size: 13px; font-weight: 700; color: #cbd8f5; letter-spacing: -.01em; margin-bottom: 10px; }
+.hero-title {
+  font-size: clamp(36px, 6vw, 52px); font-weight: 950; letter-spacing: -.03em; margin-bottom: 10px;
+  background: linear-gradient(100deg, #fff1f3 0%, #ffd9e2 30%, #ffc7dd 55%, #e0d4ff 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+  filter: drop-shadow(0 2px 3px rgba(10, 6, 30, .85)) drop-shadow(0 6px 22px rgba(10, 6, 30, .6));
+}
+.hero-eyebrow, .hero-sub { text-shadow: 0 1px 8px rgba(0, 0, 0, .4); }
+.hero-sub { font-size: 14.5px; color: #dbe4fb; margin-bottom: 24px; line-height: 1.6; }
+.hero .search-card {
+  position: relative; width: 100%; display: flex; align-items: center; gap: 8px;
+  padding: 6px 6px 6px 16px; border-radius: 999px; background: rgba(255, 255, 255, .95);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .35);
+}
+.hero .search-card input {
+  flex: 1; min-width: 0; height: 48px; border: 0; outline: 0; background: transparent;
+  padding: 0 6px; color: #10233f; font-size: 16px; font-weight: 700;
+}
+.hero .search-card input::placeholder { color: #aeb8c6; font-weight: 600; }
+.hero-badges { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+.hero-badges a {
+  font-size: 12.5px; font-weight: 700; color: #eef2ff; background: rgba(255, 255, 255, .14);
+  border: 1px solid rgba(255, 255, 255, .22); border-radius: 999px; padding: 8px 15px;
+  text-decoration: none; transition: background .15s ease;
+}
+.hero-badges a:hover { background: rgba(255, 255, 255, .26); }
+
+.today-date { font-size: 12.5px; color: #9aa6b6; font-weight: 700; }
+.today-card {
+  background: linear-gradient(135deg, #10233f, #1d3a66); color: #fff; border-radius: 16px;
+  padding: 20px 22px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  box-shadow: 0 10px 30px rgba(16, 35, 63, .25);
+}
+.today-icon { font-size: 26px; }
+.today-list { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 200px; }
+.today-row { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; font-size: 13.5px; }
+.today-row .today-role { font-weight: 800; color: #fff; }
+.today-row .today-meta { color: #b7c4e0; font-size: 12.5px; }
+
+/* ── 당직 일정 캘린더 ── */
+.cal-nav { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 800; color: #334155; }
+.cal-nav button {
+  border: 1px solid rgba(17, 24, 39, .12); background: #fff; border-radius: 8px;
+  width: 28px; height: 28px; cursor: pointer; font-size: 14px; color: #475569;
+}
+.cal-nav button:disabled { opacity: .35; cursor: default; }
+.cal-nav button:not(:disabled):hover { border-color: rgba(52, 120, 246, .42); color: #2563eb; }
+#cal-today-btn { width: auto; padding: 0 10px; font-size: 12px; font-weight: 800; }
+#cal-label { min-width: 84px; text-align: center; }
+
+.cal-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px;
+  background: #e5e9f0; border: 1px solid #e5e9f0; border-radius: 12px; overflow: hidden;
+}
+.cal-weekday { background: #f6f8fb; color: #94a3b8; font-size: 11.5px; font-weight: 800; text-align: center; padding: 8px 0; }
+.cal-cell { background: #fff; min-height: 78px; padding: 6px 8px; }
+.cal-cell--muted { background: #fafbfd; }
+.cal-cell--today { box-shadow: inset 0 0 0 2px #2563eb; }
+.cal-cell--mine { background: #eef4ff; }
+.cal-cell--latest { background: #fff3d6; box-shadow: inset 0 0 0 2px #f59e0b; }
+.cal-cell--latest .cal-daynum { color: #b45309; }
+.cal-daynum { font-size: 12px; font-weight: 800; color: #475569; margin-bottom: 4px; }
+.cal-entry { font-size: 11px; color: #334155; font-weight: 700; line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+
+.cal-wrap { position: relative; }
+.cal-tooltip {
+  position: absolute; pointer-events: none; background: #0f172a; color: #fff;
+  font-size: 11.5px; font-weight: 700; padding: 6px 10px; border-radius: 8px;
+  transform: translate(-50%, -125%); white-space: nowrap; opacity: 0; transition: opacity .1s ease; z-index: 5;
+}
+.cal-tooltip.show { opacity: 1; }
+
+.dashboard {
+  width: min(100%, 1200px); margin: 0 auto; padding: 24px clamp(16px, 4vw, 32px) 40px;
+  display: flex; flex-direction: column; gap: 28px;
+}
+.dash-row { display: grid; grid-template-columns: 1fr 1.6fr; gap: 16px; }
+.dash-card { background: #fff; border: 1px solid #eef1f6; border-radius: 16px; padding: 18px 20px; box-shadow: 0 8px 24px rgba(31, 56, 88, .05); }
+.dash-empty { color: #9aa6b6; font-size: 13.5px; line-height: 1.7; text-align: center; padding: 20px 10px; }
+
+.dash-section__head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.dash-section__head h2 { font-size: 16px; font-weight: 900; color: #1f2c44; letter-spacing: -.02em; }
+
+/* ── 결과 카드 ── */
+.result-group { display: flex; flex-direction: column; gap: 10px; text-align: left; }
+.rbox {
+  position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
+  min-height: 64px; background: #fff; border: 1px solid #eef1f6; border-radius: 16px;
+  padding: 36px 16px; box-shadow: 0 8px 24px rgba(31, 56, 88, .05); text-align: center;
+}
+.rbox__tab { position: absolute; top: 0; left: 0; font-size: 13px; font-weight: 900; letter-spacing: -.02em; padding: 8px 16px; border-radius: 16px 0 13px 0; }
+.rbox__tab--draft { color: #5a6b88; background: #e9eef5; }
+.rbox__tab--answer { color: #fff; background: linear-gradient(135deg, #2563eb, #7c3aed); }
+.rbox__tab--reason { color: #0e7a54; background: #dff2e8; }
+.rbox__v { color: #12233e; font-size: 16px; font-weight: 750; letter-spacing: -.02em; line-height: 1.5; }
+.rbox--answer {
+  background: linear-gradient(135deg, #eef2ff 0%, #f5f0ff 46%, #e6f6ff 100%);
+  box-shadow: 0 10px 30px rgba(31, 56, 88, .08), 0 0 22px rgba(91, 90, 255, .28), 0 0 50px rgba(124, 58, 237, .16);
+}
+.rbox--answer::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 2px;
+  background: linear-gradient(120deg, #2563eb, #7c3aed, #db2777);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  pointer-events: none;
+}
+.rbox--answer .rbox__v { font-size: 22px; font-weight: 950; color: #2563eb; letter-spacing: -.03em; }
+
+/* ── 명단 발췌 (엑셀 앱 느낌) ── */
+.wonmun { text-align: left; }
+.wonmun__divider { display: flex; align-items: center; gap: 12px; margin: 4px 2px 12px; color: #8a96a8; font-size: 11.5px; font-weight: 800; letter-spacing: -.01em; white-space: nowrap; }
+.wonmun__divider::before, .wonmun__divider::after { content: ""; flex: 1 1 auto; height: 1px; background: #dde3ec; }
+.xl { border: 1px solid #cdd1d8; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 32px rgba(31, 56, 88, .12); background: #fff; }
+.xl__bar { display: flex; align-items: center; gap: 8px; background: #217346; color: #fff; padding: 9px 14px; font-size: 12.5px; font-weight: 800; letter-spacing: -.02em; }
+.xl__glyph { font-size: 14px; }
+.xl__file { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.xl__sheet { overflow-x: auto; background: #fff; }
+.xl__table { border-collapse: collapse; width: 100%; font-size: 12.5px; background: #fff; }
+.xl__table th, .xl__table td { border: 1px solid #c6c6c6; padding: 8px 10px; color: #1f2c44; white-space: nowrap; }
+.xl__table th { text-align: center; }
+.xl__table td { text-align: left; }
+.xl__h { background: #e6f2ea; color: #1c6b41; font-weight: 800; }
+.xl__table td.xl__name { font-weight: 800; }
+
+/* ── 월별 막대그래프 ── */
+.chart-head { font-size: 13px; font-weight: 900; color: #334155; margin-bottom: 10px; letter-spacing: -.02em; }
+.chart-wrap { position: relative; }
+.chart-svg { width: 100%; height: auto; display: block; overflow: visible; }
+.bar { fill: #2563eb; cursor: pointer; transition: fill .12s ease; }
+.bar:hover { fill: #1d4ed8; }
+.avg-line { stroke: #94a3b8; stroke-width: 1.5; stroke-dasharray: 4 3; }
+.axis-label { font-size: 8px; fill: #94a3b8; text-anchor: middle; font-weight: 700; }
+.chart-tooltip {
+  position: absolute; pointer-events: none; background: #0f172a; color: #fff;
+  font-size: 11.5px; font-weight: 700; padding: 5px 9px; border-radius: 8px;
+  transform: translate(-50%, -125%); white-space: nowrap; opacity: 0; transition: opacity .1s ease;
+}
+.chart-tooltip.show { opacity: 1; }
+.chart-legend { margin-top: 8px; font-size: 11px; color: #94a3b8; font-weight: 700; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.chart-legend__dot { display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: #2563eb; margin-right: 4px; }
+
+/* ── 전체 텀 통계 ── */
+.stats-filter { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; color: #718096; letter-spacing: -.02em; }
+.stats-filter select {
+  border: 1px solid rgba(17, 24, 39, .12); border-radius: 10px;
+  background: #fff; color: #334155; padding: 7px 10px; font: inherit; cursor: pointer;
+}
+.xl__table th.sortable { cursor: pointer; user-select: none; }
+.xl__table th.sortable:hover { background: #d8ecdf; }
+.stats-caption { font-size: 12px; color: #718096; font-weight: 700; margin-bottom: 8px; }
+.diff--pos { color: #b45309; font-weight: 800; }
+.diff--neg { color: #1d4ed8; font-weight: 800; }
+.mini-bar-wrap { position: relative; display: flex; align-items: center; justify-content: flex-end; height: 20px; min-width: 46px; }
+.mini-bar-wrap span { position: relative; z-index: 1; font-weight: 800; }
+.mini-bar { position: absolute; left: 0; top: 2px; bottom: 2px; border-radius: 4px; background: rgba(37, 99, 235, .16); }
+.xl__table tr.row--selected td { font-weight: 900; border-top: 2px solid #2563eb; border-bottom: 2px solid #2563eb; }
+.xl__table tr.row--selected td:first-child { border-left: 2px solid #2563eb; }
+.xl__table tr.row--selected td:last-child { border-right: 2px solid #2563eb; }
+.xl__table tbody tr:nth-child(even) { background: #fafbfd; }
+
+.empty, .no-result { padding: 18px 4px 4px; color: #7b8798; font-size: 15px; line-height: 1.7; font-weight: 650; text-align: center; }
+
+.foot { text-align: center; color: #9aa6b6; font-size: 11.5px; letter-spacing: -.02em; padding-top: 24px; }
+
+@media (max-width: 780px) {
+  .dash-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .navbar { padding: 12px 14px; flex-wrap: wrap; gap: 10px; }
+  .hero { min-height: 300px; }
+  .hero-content { padding: 32px 16px; }
+  .dashboard { padding: 18px 14px 30px; }
+  .cal-cell { min-height: 54px; padding: 4px 5px; }
+  .cal-entry { font-size: 9.5px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
+
+
+/* ── Mobile preview: responsive refinements ── */
+@media (max-width: 640px) {
+  .navbar {
+    padding: 10px 12px 8px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .brand {
+    justify-content: center;
+  }
+
+  .navbar-tabs {
+    width: 100%;
+    gap: 6px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 2px 2px;
+  }
+
+  .navbar-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navbar-tabs a {
+    flex: 0 0 auto;
+    font-size: 12px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(37, 99, 235, .06);
+  }
+
+  .hero {
+    min-height: 320px;
+    background-position: center;
+  }
+
+  .hero-content {
+    width: 100%;
+    padding: 30px 16px 34px;
+  }
+
+  .hero-eyebrow {
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+
+  .hero-title {
+    font-size: clamp(34px, 12vw, 46px);
+  }
+
+  .hero-sub {
+    font-size: 13.5px;
+    margin-bottom: 18px;
+  }
+
+  .hero .search-card {
+    padding-left: 12px;
+  }
+
+  .hero .search-card input {
+    height: 46px;
+    font-size: 16px;
+  }
+
+  .hero-badges {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .hero-badges a {
+    text-align: center;
+    padding: 8px 8px;
+    font-size: 11.5px;
+  }
+
+  .dashboard {
+    padding: 16px 12px 28px;
+    gap: 22px;
+  }
+
+  .dash-card {
+    padding: 16px;
+  }
+
+  .dash-section__head {
+    align-items: flex-start;
+  }
+
+  .today-card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .today-list {
+    min-width: 0;
+  }
+
+  .cal-nav {
+    width: 100%;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .cal-nav button {
+    width: 34px;
+    height: 34px;
+  }
+
+  #cal-today-btn {
+    min-width: 58px;
+    padding: 0 9px;
+  }
+
+  #cal-label {
+    min-width: 76px;
+  }
+
+  .cal-grid {
+    border-radius: 10px;
+  }
+
+  .cal-weekday {
+    font-size: 10.5px;
+    padding: 7px 0;
+  }
+
+  .cal-cell {
+    min-height: 58px;
+    padding: 4px;
+  }
+
+  .cal-daynum {
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+
+  .cal-entry {
+    font-size: 9px;
+    line-height: 1.35;
+  }
+
+  .xl {
+    border-radius: 8px;
+  }
+
+  .xl__table {
+    font-size: 12px;
+  }
+
+  .xl__table th,
+  .xl__table td {
+    padding: 7px 8px;
+  }
+
+  .rbox {
+    padding: 34px 12px 24px;
+  }
+
+  .rbox--answer .rbox__v {
+    font-size: 20px;
+  }
+
+  .foot {
+    padding: 16px 8px 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .navbar-tabs a {
+    font-size: 11.5px;
+    padding-inline: 9px;
+  }
+
+  .hero-content {
+    padding-inline: 12px;
+  }
+
+  .hero-badges {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dashboard {
+    padding-inline: 10px;
+  }
+
+  .cal-cell {
+    min-height: 54px;
+    padding-inline: 3px;
+  }
+
+  .cal-entry {
+    font-size: 8.5px;
+  }
+}
