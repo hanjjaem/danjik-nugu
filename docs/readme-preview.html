@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>당직 누구? README 목업</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1600px; height: 900px; overflow: hidden; }
+  body { position: relative; font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; color: #1e2440; background: radial-gradient(circle at 15% 16%, #ff82c159, transparent 32%), radial-gradient(circle at 87% 83%, #7b62f451, transparent 35%), linear-gradient(125deg, #f8efff, #f3f4ff 50%, #e9eeff); }
+  body::before { content: ""; position: absolute; inset: 0; opacity: .25; background-image: linear-gradient(#9a9bc5 1px, transparent 1px), linear-gradient(90deg, #9a9bc5 1px, transparent 1px); background-size: 46px 46px; mask-image: linear-gradient(90deg, transparent, #000 30%, #000 80%, transparent); }
+  .canvas { position: relative; display: flex; align-items: center; gap: 34px; height: 100%; padding: 54px 58px 54px 72px; }
+  .copy { width: 440px; flex: none; align-self: stretch; display: flex; flex-direction: column; justify-content: center; padding-bottom: 16px; }
+  .brand { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 44px; color: #402c80; font-size: 21px; font-weight: 900; letter-spacing: -.06em; }
+  .brand-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 13px; color: white; font-size: 22px; background: linear-gradient(135deg, #f740a5, #7742dc); box-shadow: 0 12px 26px #8a5bd34b; }
+  .eyebrow { margin: 0 0 17px; color: #8c49bd; font-size: 14px; font-weight: 900; letter-spacing: .11em; }
+  h1 { margin: 0; font-size: 59px; line-height: 1.17; font-weight: 900; letter-spacing: -.075em; word-break: keep-all; }
+  h1 span { color: #913ce4; }
+  .desc { width: 390px; margin: 28px 0 0; color: #626782; font-size: 20px; line-height: 1.65; font-weight: 600; letter-spacing: -.035em; word-break: keep-all; }
+  .chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 32px; }
+  .chips span { padding: 11px 15px; border: 1px solid #d9cef0; border-radius: 999px; background: #ffffffb8; color: #675195; font-size: 14px; font-weight: 800; box-shadow: 0 4px 12px #49427a0b; }
+  .mini-note { margin-top: 53px; color: #9293aa; font-size: 12px; font-weight: 700; }
+  .browser { width: 992px; height: 748px; flex: none; overflow: hidden; border: 1px solid #dcd9ed; border-radius: 20px; background: #fff; box-shadow: 0 40px 85px #5b4b8e32, 0 12px 24px #4b467b20; transform: rotate(-1deg); }
+  .chrome { display: flex; align-items: center; gap: 12px; height: 51px; padding: 0 18px; background: #f8f8fd; border-bottom: 1px solid #e9e7f0; }
+  .dots { display: flex; gap: 6px; }
+  .dots i { display: block; width: 9px; height: 9px; border-radius: 50%; background: #f4adad; }
+  .dots i:nth-child(2) { background: #ffd48e; }.dots i:nth-child(3) { background: #95d9ac; }
+  .address { width: 580px; height: 27px; display: flex; align-items: center; margin: 0 auto; padding: 0 15px; border: 1px solid #e8e7ef; border-radius: 7px; color: #9295a7; background: #fff; font-size: 10px; font-weight: 600; }
+  .site-nav { display: flex; justify-content: flex-end; align-items: center; gap: 25px; height: 48px; padding: 0 32px; color: #64718c; background: #fff; font-size: 11px; font-weight: 800; }
+  .site-nav b { color: #4c3d8d; }
+  .hero { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 273px; color: #fff; background: linear-gradient(180deg, #10143873, #101438bd), url("../app/hero.png") center 57% / cover; text-align: center; }
+  .hero small { color: #e8e7fd; font-size: 12px; font-weight: 800; }
+  .hero h2 { margin: 12px 0 7px; font-size: 66px; font-weight: 950; letter-spacing: -.08em; line-height: 1.1; background: linear-gradient(105deg, #ff41ab, #e448de 48%, #9562ff); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 1px #fff) drop-shadow(0 7px 12px #12112b99); }
+  .hero p { margin: 0 0 14px; color: #f4efff; font-size: 13px; font-weight: 600; }
+  .search { display: flex; align-items: center; justify-content: space-between; width: 460px; height: 42px; padding: 0 18px; border-radius: 24px; color: #8590aa; background: #fff; box-shadow: 0 10px 24px #10142d66; font-size: 12px; font-weight: 700; text-align: left; }
+  .search b { color: #9a55d8; font-size: 18px; }
+  .dashboard { height: 376px; padding: 18px 28px 24px; background: #f7f8ff; }
+  .top-row { display: flex; gap: 16px; align-items: stretch; height: 92px; margin-bottom: 20px; }
+  .today-title { align-self: center; width: 92px; color: #29354f; font-size: 14px; font-weight: 900; letter-spacing: -.04em; }
+  .today-title small { display: block; margin-top: 5px; color: #909bb1; font-size: 10px; font-weight: 600; }
+  .today-card { display: flex; align-items: center; gap: 16px; flex: 1; padding: 16px 22px; border-radius: 14px; color: #fff; background: linear-gradient(120deg, #172e52, #254b78); box-shadow: 0 9px 19px #1e39672c; }
+  .today-card .moon { font-size: 26px; }.today-card b { display: block; margin-bottom: 7px; font-size: 14px; }.today-card span { color: #cdd9ec; font-size: 11px; font-weight: 700; }
+  .month-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 11px; color: #29354f; }
+  .month-head strong { font-size: 14px; font-weight: 900; }.month-head span { font-size: 11px; font-weight: 800; }.month-head em { font-style: normal; margin: 0 9px; color: #94a0b3; }
+  .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; overflow: hidden; border: 1px solid #dce3ee; border-radius: 10px; background: #dce3ee; }
+  .weekday { display: grid; place-items: center; height: 24px; color: #7c8aa3; background: #e9edf4; font-size: 9px; font-weight: 800; }.weekday:first-child { color: #cb526b; }.weekday:nth-child(7) { color: #4a70b9; }
+  .day { height: 36px; padding: 4px 6px; color: #3d4d69; background: #fff; font-size: 9px; font-weight: 800; }.day.sun { background: #fff0f3; color: #cb526b; }.day.sat { background: #ecf2ff; color: #4a70b9; }.day.muted { color: #abb5c4; background: #f8f9fc; }.day.today { box-shadow: inset 0 0 0 2px #8670ed; background: #f2efff; }
+  .day span { display: block; margin-top: 3px; color: #687da2; font-size: 8px; font-weight: 700; white-space: nowrap; }
+  .sample { position: absolute; top: 30px; right: 40px; padding: 9px 13px; border-radius: 999px; color: #7e5cac; background: #ffffffd9; box-shadow: 0 5px 18px #5c4b8e1c; font-size: 12px; font-weight: 800; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <span class="sample">화면 예시</span>
+  <section class="copy" aria-label="당직 누구 소개">
+    <div class="brand"><span class="brand-icon">?</span>당직 누구?</div>
+    <p class="eyebrow">DUTY, SIMPLIFIED.</p>
+    <h1>오늘 당직,<br><span>한눈에.</span></h1>
+    <p class="desc">엑셀 명단을 뒤적일 시간에<br>이름 한 번으로 필요한 당직 정보를 확인하세요.</p>
+    <div class="chips"><span>오늘의 당직</span><span>월별 일정</span><span>내 이력과 통계</span></div>
+    <div class="mini-note">부산광역시 동구 당직 명단 조회 서비스</div>
+  </section>
+  <section class="browser" aria-label="당직 누구 웹 화면 목업">
+    <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="address">hanjjaem.github.io/danjik-nugu/</div></div>
+    <div class="site-nav"><b>오늘 당직</b><span>당직 일정</span><span>당직 이력</span><span>당직 통계</span></div>
+    <div class="hero"><small>부산광역시 동구 · 오늘도 동구를 지키는 당신이 있습니다</small><h2>당직 누구?</h2><p>이름을 검색하면 당직 이력과 통계를 보여드려요</p><div class="search">이름 검색 <b>⌕</b></div></div>
+    <div class="dashboard">
+      <div class="top-row"><div class="today-title">오늘의 당직<small>오늘 바로 확인</small></div><div class="today-card"><span class="moon">☾</span><div><b>오늘 누가 근무하나요?</b><span>당직사령 · 당직원 · 근무 유형을 한 번에</span></div></div></div>
+      <div class="month-head"><strong>당직 일정</strong><span>‹ <em>2026년 9월</em> ›</span></div>
+      <div class="calendar">
+        <div class="weekday">일</div><div class="weekday">월</div><div class="weekday">화</div><div class="weekday">수</div><div class="weekday">목</div><div class="weekday">금</div><div class="weekday">토</div>
+        <div class="day muted"></div><div class="day muted"></div><div class="day">1<span>☾ 근무</span></div><div class="day">2<span>☾ 근무</span></div><div class="day">3<span>☾ 근무</span></div><div class="day">4<span>☾ 근무</span></div><div class="day sat">5<span>☀ · ☾</span></div>
+        <div class="day sun">6<span>☀ · ☾</span></div><div class="day">7<span>☾ 근무</span></div><div class="day">8<span>☾ 근무</span></div><div class="day">9<span>☾ 근무</span></div><div class="day">10<span>☾ 근무</span></div><div class="day">11<span>☾ 근무</span></div><div class="day sat">12<span>☀ · ☾</span></div>
+        <div class="day sun">13<span>☀ · ☾</span></div><div class="day">14<span>☾ 근무</span></div><div class="day">15<span>☾ 근무</span></div><div class="day">16<span>☾ 근무</span></div><div class="day">17<span>☾ 근무</span></div><div class="day">18<span>☾ 근무</span></div><div class="day sat">19<span>☀ · ☾</span></div>
+        <div class="day sun">20<span>☀ · ☾</span></div><div class="day">21<span>☾ 근무</span></div><div class="day">22<span>☾ 근무</span></div><div class="day today">23<span>오늘</span></div><div class="day">24</div><div class="day">25</div><div class="day sat">26</div>
+        <div class="day sun">27</div><div class="day">28<span>☾ 근무</span></div><div class="day">29<span>☾ 근무</span></div><div class="day">30<span>☾ 근무</span></div><div class="day muted"></div><div class="day muted"></div><div class="day muted"></div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>
