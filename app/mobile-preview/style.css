@@ -933,3 +933,13 @@ body::before {
     scroll-margin-top: 52px;
   }
 }
+
+/* ── Mobile nav anchor offset v1 ── */
+@media (max-width: 640px) {
+  #today,
+  #calendar,
+  #dashboard,
+  #stats {
+    scroll-margin-top: 52px;
+  }
+}
