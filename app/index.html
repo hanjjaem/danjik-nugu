@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>당직누구</title>
-<link rel="stylesheet" href="style.css?v=20260923-production2">
+<link rel="stylesheet" href="style.css?v=20260923-historyprompt1">
 </head>
 <body>
 <header class="navbar">
@@ -26,6 +26,9 @@
       <input id="name-input" placeholder="이름 검색 (예: 한제림)" aria-label="이름 검색">
       <span class="search-caret" aria-hidden="true"></span>
     </div>
+    <p class="my-duty-hint" id="my-duty-hint" role="status" aria-live="polite">
+      이름을 입력하면 당직 이력을 확인할 수 있어요
+    </p>
     <div class="hero-badges">
       <a href="#today">🕐 오늘 당직</a>
       <a href="#calendar">📅 당직 일정</a>
@@ -91,6 +94,6 @@
 </main>
 
 <script src="data.js?v=20260923-production2"></script>
-<script src="app.js?v=20260923-labelsync1"></script>
+<script src="app.js?v=20260923-historyprompt1"></script>
 </body>
 </html>

@@ -180,6 +180,8 @@ const historySection = document.getElementById("history-section");
 const myDutySection = document.getElementById("my-duty");
 const myDutyTriggers = document.querySelectorAll("[data-my-duty-trigger]");
 const searchCard = document.querySelector(".hero .search-card");
+const myDutyHint = document.getElementById("my-duty-hint");
+let myDutyHintTimer = null;
 
 const uniqueNames = [...new Set(DUTY_DATA.map((r) => r.name))].sort();
 const overallAvgCount = DUTY_DATA.length / uniqueNames.length;
@@ -250,6 +252,33 @@ let matchedName = null;
 const emptySummary = '<p class="dash-empty">이름을 검색하면 총 당직 횟수와 평균 대비가 여기 표시됩니다.</p>';
 const emptyChart = '<p class="dash-empty">이름을 검색하면 월별 당직 그래프가 여기 표시됩니다.</p>';
 
+function promptForDutyHistoryName() {
+  if (searchCard) {
+    searchCard.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    // Re-trigger the pulse on every request, even when clicked repeatedly.
+    searchCard.classList.remove("search-card--attention");
+    void searchCard.offsetWidth;
+    searchCard.classList.add("search-card--attention");
+  }
+
+  if (myDutyHint) {
+    myDutyHint.classList.add("is-visible");
+  }
+
+  if (myDutyHintTimer) {
+    window.clearTimeout(myDutyHintTimer);
+  }
+  myDutyHintTimer = window.setTimeout(() => {
+    searchCard?.classList.remove("search-card--attention");
+    myDutyHint?.classList.remove("is-visible");
+  }, 3600);
+
+  window.setTimeout(() => {
+    nameInput.focus({ preventScroll: true });
+  }, 280);
+}
+
 myDutyTriggers.forEach((trigger) => {
   trigger.addEventListener("click", (e) => {
     e.preventDefault();
@@ -259,12 +288,7 @@ myDutyTriggers.forEach((trigger) => {
       return;
     }
 
-    if (searchCard) {
-      searchCard.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-    window.setTimeout(() => {
-      nameInput.focus({ preventScroll: true });
-    }, 280);
+    promptForDutyHistoryName();
   });
 });
 
