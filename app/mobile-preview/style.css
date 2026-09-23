@@ -773,3 +773,72 @@ body::before {
     font-size: 10px;
   }
 }
+
+/* ── Mobile glass strip navbar v1 ── */
+@media (max-width: 640px) {
+  .navbar {
+    position: sticky;
+    top: 0;
+    left: auto;
+    right: auto;
+    z-index: 30;
+    min-height: 48px;
+    padding: 6px 10px;
+    display: block;
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, .26);
+    border-radius: 0;
+    background: rgba(248, 250, 252, .58);
+    -webkit-backdrop-filter: blur(16px) saturate(125%);
+    backdrop-filter: blur(16px) saturate(125%);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, .08);
+  }
+
+  .brand {
+    display: none;
+  }
+
+  .navbar-tabs {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2px;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .navbar-tabs a {
+    min-width: 0;
+    padding: 8px 2px;
+    border-radius: 10px;
+    background: transparent;
+    color: #52627a;
+    text-align: center;
+    font-size: 10.5px;
+    font-weight: 800;
+    line-height: 1.1;
+    white-space: nowrap;
+    text-shadow: none;
+  }
+
+  .navbar-tabs a:hover,
+  .navbar-tabs a:focus-visible {
+    background: rgba(255, 255, 255, .34);
+    color: #0f172a;
+  }
+
+  .hero {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .navbar {
+    padding-inline: 8px;
+  }
+
+  .navbar-tabs a {
+    font-size: 10px;
+    padding-inline: 1px;
+  }
+}
