@@ -276,46 +276,27 @@ body::before {
 
   .hero {
     min-height: 320px;
-    background: none;
-    isolation: isolate;
+    background: url("../hero.png") center / cover no-repeat;
+    isolation: auto;
   }
 
   .hero::before,
   .hero::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  /* Back layer: fill the whole hero naturally, then soften it. */
-  .hero::before {
-    z-index: 0;
-    inset: -10px;
-    background: url("../hero.png") center / cover no-repeat;
-    filter: blur(12px) brightness(.64) saturate(.9);
-    transform: scale(1.06);
-  }
-
-  /* Front layer: show more of the original artwork so characters are not cropped. */
-  .hero::after {
-    z-index: 1;
-    background: url("../hero.png") center / 88% auto no-repeat;
-    filter: brightness(.92);
+    content: none;
   }
 
   .hero-overlay {
-    z-index: 2;
-    background: linear-gradient(180deg, rgba(10, 16, 32, .20) 0%, rgba(10, 16, 32, .32) 52%, rgba(10, 16, 32, .62) 100%);
+    z-index: 0;
+    background: linear-gradient(180deg, rgba(10, 16, 32, .26) 0%, rgba(10, 16, 32, .42) 55%, rgba(10, 16, 32, .70) 100%);
   }
 
   .hero-content {
-    z-index: 3;
+    z-index: 1;
   }
 
   .hero-content {
     width: 100%;
-    padding: 30px 16px 34px;
+    padding: 24px 16px 26px;
   }
 
   .hero-eyebrow {
@@ -343,15 +324,19 @@ body::before {
 
   .hero-badges {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    margin-top: 14px;
+    grid-template-columns: repeat(2, max-content);
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
   }
 
   .hero-badges a {
+    min-width: 118px;
     text-align: center;
-    padding: 8px 8px;
-    font-size: 11.5px;
+    padding: 5px 9px;
+    font-size: 10.5px;
+    line-height: 1.25;
+    background: rgba(255, 255, 255, .10);
   }
 
   .dashboard {
