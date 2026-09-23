@@ -174,14 +174,14 @@ function xlTable(divider, headers, rows) {
 
 // --- 이름으로 보기 ---
 const nameInput = document.getElementById("name-input");
-const nameList = document.getElementById("name-list");
 const summaryCard = document.getElementById("summary-card");
 const chartCardSlot = document.getElementById("chart-card-slot");
 const historySection = document.getElementById("history-section");
+const myDutySection = document.getElementById("my-duty");
+const myDutyNav = document.getElementById("my-duty-nav");
+const searchCard = document.querySelector(".hero .search-card");
 
 const uniqueNames = [...new Set(DUTY_DATA.map((r) => r.name))].sort();
-nameList.innerHTML = uniqueNames.map((n) => `<option value="${n}">`).join("");
-
 const overallAvgCount = DUTY_DATA.length / uniqueNames.length;
 const monthsCount = new Set(DUTY_DATA.map((r) => r.date.slice(0, 7))).size;
 const avgPerMonth = overallAvgCount / monthsCount;
@@ -245,14 +245,32 @@ function wireChartTooltip() {
 }
 
 let highlightedName = null;
+let matchedName = null;
 
 const emptySummary = '<p class="dash-empty">이름을 검색하면 총 당직 횟수와 평균 대비가 여기 표시됩니다.</p>';
 const emptyChart = '<p class="dash-empty">이름을 검색하면 월별 당직 그래프가 여기 표시됩니다.</p>';
+
+myDutyNav.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  if (matchedName) {
+    myDutySection.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+
+  if (searchCard) {
+    searchCard.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+  window.setTimeout(() => {
+    nameInput.focus({ preventScroll: true });
+  }, 280);
+});
 
 nameInput.addEventListener("input", () => {
   const name = nameInput.value.trim();
   highlightedName = name || null;
   if (!name) {
+    matchedName = null;
     summaryCard.innerHTML = emptySummary;
     chartCardSlot.innerHTML = emptyChart;
     historySection.innerHTML = "";
@@ -262,6 +280,7 @@ nameInput.addEventListener("input", () => {
   }
   const records = DUTY_DATA.filter((r) => r.name === name);
   if (records.length === 0) {
+    matchedName = null;
     summaryCard.innerHTML = '<p class="dash-empty">해당 이름의 당직 기록이 없습니다.</p>';
     chartCardSlot.innerHTML = emptyChart;
     historySection.innerHTML = "";
@@ -269,7 +288,19 @@ nameInput.addEventListener("input", () => {
     window.focusCalendarOnPerson(null);
     return;
   }
+  matchedName = name;
   window.focusCalendarOnPerson(name);
+
+  // 정확한 이름이 검색되면 키보드를 닫고 개인 당직 영역으로 이동한다.
+  // 캘린더의 최근 당직일 하이라이트는 그대로 유지된다.
+  if (document.activeElement === nameInput) {
+    nameInput.blur();
+  }
+  window.setTimeout(() => {
+    if (myDutySection) {
+      myDutySection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, 260);
 
   const dates = records.map((r) => r.date).sort();
   const intervals = [];
@@ -316,9 +347,10 @@ nameInput.addEventListener("input", () => {
   renderStatsTable();
 });
 
-// --- 전체 텀 통계 ---
-const roleFilter = document.getElementById("role-filter");
+// --- 당직 통계 ---
+const rolePills = document.getElementById("role-pills");
 const statsTable = document.getElementById("stats-table");
+let currentRole = "전체";
 let statsSortKey = "count";
 let statsSortDir = -1;
 
@@ -347,7 +379,7 @@ function personIntervalStats(role) {
 }
 
 function renderStatsTable() {
-  const rows = personIntervalStats(roleFilter.value);
+  const rows = personIntervalStats(currentRole);
   rows.sort((a, b) => {
     const av = a[statsSortKey];
     const bv = b[statsSortKey];
@@ -409,9 +441,9 @@ function renderStatsTable() {
     .join("");
   const bodyHtml = rowsHtml.join("");
   statsTable.innerHTML = `
-    <p class="stats-caption">${roleFilter.value} ${rows.length}명 평균 — 횟수 ${avgCountAll.toFixed(1)}회, 텀 ${avgTermAll !== null ? avgTermAll.toFixed(1) + "일" : "-"} (순위는 현재 정렬 기준)</p>
+    <p class="stats-caption">${currentRole} ${rows.length}명 평균 — 횟수 ${avgCountAll.toFixed(1)}회, 텀 ${avgTermAll !== null ? avgTermAll.toFixed(1) + "일" : "-"} (순위는 현재 정렬 기준)</p>
     <div class="xl">
-      <div class="xl__bar"><span class="xl__glyph">▦</span><span class="xl__file">${roleFilter.value} · ${rows.length}명</span></div>
+      <div class="xl__bar"><span class="xl__glyph">▦</span><span class="xl__file">${currentRole} · ${rows.length}명</span></div>
       <div class="xl__sheet">
         <table class="xl__table">
           <thead><tr>${head}</tr></thead>
@@ -434,5 +466,13 @@ function renderStatsTable() {
   }
 }
 
-roleFilter.addEventListener("change", renderStatsTable);
+rolePills.querySelectorAll(".role-pill").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    currentRole = btn.dataset.role;
+    rolePills.querySelectorAll(".role-pill").forEach((pill) => {
+      pill.classList.toggle("is-active", pill === btn);
+    });
+    renderStatsTable();
+  });
+});
 renderStatsTable();

@@ -276,12 +276,27 @@ body::before {
 
   .hero {
     min-height: 320px;
-    background-position: center;
+    background: url("hero.png") center / cover no-repeat;
+    isolation: auto;
+  }
+
+  .hero::before,
+  .hero::after {
+    content: none;
+  }
+
+  .hero-overlay {
+    z-index: 0;
+    background: linear-gradient(180deg, rgba(10, 16, 32, .26) 0%, rgba(10, 16, 32, .42) 55%, rgba(10, 16, 32, .70) 100%);
+  }
+
+  .hero-content {
+    z-index: 1;
   }
 
   .hero-content {
     width: 100%;
-    padding: 30px 16px 34px;
+    padding: 24px 16px 26px;
   }
 
   .hero-eyebrow {
@@ -309,15 +324,19 @@ body::before {
 
   .hero-badges {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    margin-top: 14px;
+    grid-template-columns: repeat(2, max-content);
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
   }
 
   .hero-badges a {
+    min-width: 118px;
     text-align: center;
-    padding: 8px 8px;
-    font-size: 11.5px;
+    padding: 5px 9px;
+    font-size: 10.5px;
+    line-height: 1.25;
+    background: rgba(255, 255, 255, .10);
   }
 
   .dashboard {
@@ -477,5 +496,467 @@ body::before {
   .hero .search-card input:placeholder-shown:not(:focus) + .search-caret {
     animation: none;
     opacity: .55;
+  }
+}
+
+/* ── Mobile search refinement v4: softer glass ── */
+@media (max-width: 640px) {
+  .hero .search-card {
+    width: min(78%, 440px);
+    margin-inline: auto;
+    padding: 3px 5px 3px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, .30);
+    background: rgba(255, 255, 255, .52);
+    -webkit-backdrop-filter: blur(14px) saturate(125%);
+    backdrop-filter: blur(14px) saturate(125%);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .14);
+  }
+
+  .hero .search-card input {
+    height: 38px;
+    font-size: 14.5px;
+  }
+
+  .hero .search-card input::placeholder {
+    color: rgba(42, 57, 78, .72);
+  }
+
+  .search-caret {
+    left: 16px;
+    height: 16px;
+  }
+}
+
+/* ── Mobile calendar width fix v1 ── */
+@media (max-width: 640px) {
+  .cal-grid {
+    width: 100%;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .cal-cell {
+    min-width: 0;
+    overflow: hidden;
+    padding: 4px 2px;
+  }
+
+  .cal-entry {
+    min-width: 0;
+    font-size: 8.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* ── Mobile badge alignment v1 ── */
+@media (max-width: 640px) {
+  .hero-badges {
+    width: min(78%, 440px);
+    margin: 10px auto 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+    gap: 6px;
+  }
+
+  .hero-badges a {
+    min-width: 0;
+    width: 100%;
+    text-align: center;
+    padding: 5px 8px;
+    font-size: 10.5px;
+    line-height: 1.25;
+    color: rgba(255, 255, 255, .92);
+    background: rgba(255, 255, 255, .30);
+    border: 1px solid rgba(255, 255, 255, .18);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+  }
+}
+
+/* ── Duty stats role pills v1 ── */
+.role-pills {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.role-pill {
+  appearance: none;
+  border: 1px solid rgba(37, 99, 235, .12);
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: rgba(37, 99, 235, .055);
+  color: #64748b;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+
+.role-pill:hover {
+  border-color: rgba(37, 99, 235, .28);
+  background: rgba(37, 99, 235, .09);
+  color: #334155;
+}
+
+.role-pill.is-active {
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, .20);
+}
+
+@media (max-width: 640px) {
+  #stats .dash-section__head {
+    align-items: flex-start;
+  }
+
+  .role-pills {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .role-pill {
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+}
+
+/* ── Mobile single-row navbar v1 ── */
+@media (max-width: 640px) {
+  .navbar {
+    min-height: 48px;
+    padding: 8px 10px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .brand {
+    flex: 0 0 auto;
+    justify-content: flex-start;
+  }
+
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+
+  .navbar-tabs {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2px;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .navbar-tabs a {
+    min-width: 0;
+    padding: 7px 2px;
+    border-radius: 8px;
+    background: transparent;
+    text-align: center;
+    font-size: 10.5px;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 380px) {
+  .navbar {
+    padding-inline: 8px;
+    gap: 6px;
+  }
+
+  .navbar-tabs a {
+    font-size: 10px;
+    padding-inline: 1px;
+  }
+}
+
+/* ── Mobile floating glass navbar v1 ── */
+@media (max-width: 640px) {
+  .navbar {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    right: 12px;
+    z-index: 20;
+    min-height: 0;
+    padding: 5px;
+    display: block;
+    border: 1px solid rgba(255, 255, 255, .22);
+    border-radius: 18px;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, .20),
+      rgba(255, 255, 255, .10)
+    );
+    -webkit-backdrop-filter: blur(18px) saturate(135%);
+    backdrop-filter: blur(18px) saturate(135%);
+    box-shadow:
+      0 10px 30px rgba(8, 15, 35, .16),
+      inset 0 1px 0 rgba(255, 255, 255, .18);
+  }
+
+  .brand {
+    display: none;
+  }
+
+  .navbar-tabs {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .navbar-tabs a {
+    min-width: 0;
+    padding: 9px 3px;
+    border-radius: 13px;
+    background: transparent;
+    color: rgba(255, 255, 255, .88);
+    text-align: center;
+    font-size: 10.5px;
+    font-weight: 800;
+    line-height: 1.1;
+    white-space: nowrap;
+    text-shadow: 0 1px 8px rgba(7, 12, 28, .35);
+    transition:
+      background .16s ease,
+      color .16s ease,
+      transform .16s ease;
+  }
+
+  .navbar-tabs a:hover,
+  .navbar-tabs a:focus-visible {
+    background: rgba(255, 255, 255, .14);
+    color: #fff;
+  }
+
+  .hero {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .navbar {
+    left: 9px;
+    right: 9px;
+    top: 8px;
+    border-radius: 16px;
+  }
+
+  .navbar-tabs {
+    gap: 2px;
+  }
+
+  .navbar-tabs a {
+    padding-inline: 2px;
+    font-size: 10px;
+  }
+}
+
+/* ── Mobile glass strip navbar v1 ── */
+@media (max-width: 640px) {
+  .navbar {
+    position: sticky;
+    top: 0;
+    left: auto;
+    right: auto;
+    z-index: 30;
+    min-height: 48px;
+    padding: 6px 10px;
+    display: block;
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, .26);
+    border-radius: 0;
+    background: rgba(248, 250, 252, .58);
+    -webkit-backdrop-filter: blur(16px) saturate(125%);
+    backdrop-filter: blur(16px) saturate(125%);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, .08);
+  }
+
+  .brand {
+    display: none;
+  }
+
+  .navbar-tabs {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2px;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .navbar-tabs a {
+    min-width: 0;
+    padding: 8px 2px;
+    border-radius: 10px;
+    background: transparent;
+    color: #52627a;
+    text-align: center;
+    font-size: 10.5px;
+    font-weight: 800;
+    line-height: 1.1;
+    white-space: nowrap;
+    text-shadow: none;
+  }
+
+  .navbar-tabs a:hover,
+  .navbar-tabs a:focus-visible {
+    background: rgba(255, 255, 255, .34);
+    color: #0f172a;
+  }
+
+  .hero {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .navbar {
+    padding-inline: 8px;
+  }
+
+  .navbar-tabs a {
+    font-size: 10px;
+    padding-inline: 1px;
+  }
+}
+
+/* ── Mobile twilight glass navbar v2 ── */
+@media (max-width: 640px) {
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    min-height: 40px;
+    padding: 3px 8px;
+    display: block;
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 0;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(31, 48, 100, .82) 0%,
+        rgba(69, 58, 116, .78) 52%,
+        rgba(109, 63, 108, .72) 100%
+      );
+    -webkit-backdrop-filter: blur(16px) saturate(125%);
+    backdrop-filter: blur(16px) saturate(125%);
+    box-shadow:
+      0 4px 14px rgba(12, 20, 45, .10),
+      inset 0 1px 0 rgba(255, 255, 255, .08);
+  }
+
+  .navbar-tabs {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+  }
+
+  .navbar-tabs a {
+    min-width: 0;
+    margin: 0;
+    padding: 7px 0;
+    border-radius: 8px;
+    background: transparent;
+    color: rgba(255, 255, 255, .90);
+    text-align: center;
+    font-size: 10.5px;
+    font-weight: 800;
+    line-height: 1.1;
+    white-space: nowrap;
+    text-shadow: 0 1px 7px rgba(8, 12, 28, .28);
+  }
+
+  .navbar-tabs a:hover,
+  .navbar-tabs a:focus-visible {
+    background: rgba(255, 255, 255, .10);
+    color: #fff;
+  }
+}
+
+@media (max-width: 380px) {
+  .navbar {
+    min-height: 38px;
+    padding: 2px 6px;
+  }
+
+  .navbar-tabs a {
+    padding: 7px 0;
+    font-size: 10px;
+  }
+}
+
+/* ── Mobile three-item navbar v1 ── */
+@media (max-width: 640px) {
+  .navbar-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ── Mobile restore four-item navbar v1 ── */
+@media (max-width: 640px) {
+  .navbar-tabs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ── Mobile search result scroll fix v1 ── */
+@media (max-width: 640px) {
+  #calendar {
+    scroll-margin-top: 52px;
+  }
+}
+
+/* ── Mobile nav anchor offset v1 ── */
+@media (max-width: 640px) {
+  #today,
+  #calendar,
+  #dashboard,
+  #stats {
+    scroll-margin-top: 52px;
+  }
+}
+
+/* ── My duty navigation UX v1 ── */
+.my-duty-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  #my-duty {
+    scroll-margin-top: 48px;
+  }
+
+  .hero .search-card {
+    scroll-margin-top: 64px;
   }
 }

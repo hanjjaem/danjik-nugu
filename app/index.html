@@ -4,19 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>당직누구</title>
-<link rel="stylesheet" href="style.css?v=20260923-prod">
+<link rel="stylesheet" href="style.css?v=20260923-production2">
 </head>
 <body>
 <header class="navbar">
-  <div class="brand">
-    <div class="brand-mark">🌙</div>
-    <span>당직 누구?</span>
-  </div>
-  <nav class="navbar-tabs">
-    <a href="#today">오늘의 당직</a>
+<nav class="navbar-tabs">
+    <a href="#today">오늘 당직</a>
     <a href="#calendar">당직 일정</a>
-    <a href="#dashboard">내 통계</a>
-    <a href="#stats">전체 통계</a>
+    <a href="#my-duty" id="my-duty-nav">당직 이력</a>
+    <a href="#stats">당직 통계</a>
   </nav>
 </header>
 
@@ -27,15 +23,14 @@
     <h1 class="hero-title">당직 누구?</h1>
     <p class="hero-sub">이름을 검색하면 당직 이력과 통계를 보여드려요</p>
     <div class="search-card">
-      <input list="name-list" id="name-input" placeholder="이름 검색 (예: 한제림)" aria-label="이름 검색">
+      <input id="name-input" placeholder="이름 검색 (예: 한제림)" aria-label="이름 검색">
       <span class="search-caret" aria-hidden="true"></span>
-      <datalist id="name-list"></datalist>
     </div>
     <div class="hero-badges">
       <a href="#today">🕐 오늘</a>
-      <a href="#dashboard">📋 내 당직 이력</a>
+      <a href="#dashboard">📅 당직 일정</a>
       <a href="#calendar">📅 이번 주 당직</a>
-      <a href="#stats">📊 전체 통계</a>
+      <a href="#stats">📊 당직 통계</a>
     </div>
   </div>
 </section>
@@ -65,30 +60,29 @@
     </div>
   </section>
 
-  <div class="dash-row">
-    <div class="dash-card" id="summary-card">
-      <p class="dash-empty">이름을 검색하면 총 당직 횟수와 평균 대비가 여기 표시됩니다.</p>
+  <section id="my-duty" class="dash-section my-duty-section" aria-label="내 당직">
+    <div class="dash-row">
+      <div class="dash-card" id="summary-card">
+        <p class="dash-empty">이름을 검색하면 총 당직 횟수와 평균 대비가 여기 표시됩니다.</p>
+      </div>
+      <div class="dash-card" id="chart-card-slot">
+        <p class="dash-empty">이름을 검색하면 월별 당직 그래프가 여기 표시됩니다.</p>
+      </div>
     </div>
-    <div class="dash-card" id="chart-card-slot">
-      <p class="dash-empty">이름을 검색하면 월별 당직 그래프가 여기 표시됩니다.</p>
-    </div>
-  </div>
 
-  <div id="history-section"></div>
+    <div id="history-section"></div>
+  </section>
 
   <section id="stats" class="dash-section">
     <div class="dash-section__head">
-      <h2>전체 텀 통계</h2>
-      <label class="stats-filter">
-        직책 필터
-        <select id="role-filter">
-          <option value="당직사령">당직사령</option>
-          <option value="전체">전체</option>
-          <option value="당직원">당직원</option>
-          <option value="당직원(방재)">당직원(방재)</option>
-          <option value="당직원(재택)">당직원(재택)</option>
-        </select>
-      </label>
+      <h2>당직 통계</h2>
+      <div class="role-pills" id="role-pills" aria-label="직책 필터">
+        <button type="button" class="role-pill is-active" data-role="전체">전체</button>
+        <button type="button" class="role-pill" data-role="당직사령">당직사령</button>
+        <button type="button" class="role-pill" data-role="당직원">당직원</button>
+        <button type="button" class="role-pill" data-role="당직원(방재)">방재</button>
+        <button type="button" class="role-pill" data-role="당직원(재택)">재택</button>
+      </div>
     </div>
     <div id="stats-table"></div>
   </section>
@@ -96,7 +90,7 @@
   <p class="foot">당직근무 명단 데이터를 기반으로 합니다. 최종 확인은 원본 명단으로.</p>
 </main>
 
-<script src="data.js?v=20260923-prod"></script>
-<script src="app.js?v=20260923-prod"></script>
+<script src="data.js?v=20260923-production2"></script>
+<script src="app.js?v=20260923-production2"></script>
 </body>
 </html>
