@@ -1,14 +1,17 @@
-name: Deploy to GitHub Pages
+name: Deploy mobile preview to GitHub Pages
 
 on:
   push:
-    branches: [master]
-  workflow_dispatch:
+    branches: [mobile-preview]
 
 permissions:
   contents: read
   pages: write
   id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -17,10 +20,29 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout production
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          path: production
+
+      - name: Checkout mobile preview
+        uses: actions/checkout@v4
+        with:
+          ref: mobile-preview
+          path: preview
+
+      - name: Build combined Pages artifact
+        run: |
+          mkdir -p site/mobile-preview
+          cp -R production/app/. site/
+          cp -R preview/app/. site/mobile-preview/
+
       - uses: actions/configure-pages@v5
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: app
+          path: site
+
       - id: deployment
         uses: actions/deploy-pages@v4
