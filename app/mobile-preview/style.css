@@ -1020,3 +1020,66 @@ body::before {
     outline-offset: 3px;
   }
 }
+
+/* ── Duty history hint neon v2 ── */
+.my-duty-hint.is-visible {
+  display: inline-block;
+  align-self: center;
+  max-height: 40px;
+  margin: 9px auto 0;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg,
+      rgba(92, 124, 250, .16) 0%,
+      rgba(168, 85, 247, .18) 52%,
+      rgba(236, 72, 153, .14) 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.05) inset,
+    0 0 16px rgba(129, 92, 246, .22),
+    0 0 28px rgba(236, 72, 153, .12);
+  color: transparent;
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+}
+
+.my-duty-hint.is-visible::first-line {
+  color: #fff;
+}
+
+.my-duty-hint.is-visible {
+  -webkit-text-fill-color: transparent;
+  background-image:
+    linear-gradient(90deg,
+      rgba(92, 124, 250, .16),
+      rgba(168, 85, 247, .18),
+      rgba(236, 72, 153, .14)),
+    linear-gradient(90deg, #f8fbff 0%, #d9e6ff 35%, #f0d8ff 68%, #ffd8ec 100%);
+  background-origin: border-box;
+  background-clip: padding-box, text;
+  -webkit-background-clip: padding-box, text;
+  filter: drop-shadow(0 0 5px rgba(183, 148, 255, .36));
+  animation: duty-hint-glow 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes duty-hint-glow {
+  from {
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.05) inset,
+      0 0 12px rgba(129, 92, 246, .18),
+      0 0 22px rgba(236, 72, 153, .08);
+  }
+  to {
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.08) inset,
+      0 0 20px rgba(129, 92, 246, .30),
+      0 0 34px rgba(236, 72, 153, .16);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .my-duty-hint.is-visible {
+    animation: none;
+  }
+}
