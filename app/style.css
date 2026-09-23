@@ -237,3 +237,245 @@ body::before {
   .cal-entry { font-size: 9.5px; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
+
+
+/* ── Mobile preview: responsive refinements ── */
+@media (max-width: 640px) {
+  .navbar {
+    padding: 10px 12px 8px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .brand {
+    justify-content: center;
+  }
+
+  .navbar-tabs {
+    width: 100%;
+    gap: 6px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 2px 2px;
+  }
+
+  .navbar-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navbar-tabs a {
+    flex: 0 0 auto;
+    font-size: 12px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(37, 99, 235, .06);
+  }
+
+  .hero {
+    min-height: 320px;
+    background-position: center;
+  }
+
+  .hero-content {
+    width: 100%;
+    padding: 30px 16px 34px;
+  }
+
+  .hero-eyebrow {
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+
+  .hero-title {
+    font-size: clamp(34px, 12vw, 46px);
+  }
+
+  .hero-sub {
+    font-size: 13.5px;
+    margin-bottom: 18px;
+  }
+
+  .hero .search-card {
+    padding-left: 12px;
+  }
+
+  .hero .search-card input {
+    height: 46px;
+    font-size: 16px;
+  }
+
+  .hero-badges {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .hero-badges a {
+    text-align: center;
+    padding: 8px 8px;
+    font-size: 11.5px;
+  }
+
+  .dashboard {
+    padding: 16px 12px 28px;
+    gap: 22px;
+  }
+
+  .dash-card {
+    padding: 16px;
+  }
+
+  .dash-section__head {
+    align-items: flex-start;
+  }
+
+  .today-card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .today-list {
+    min-width: 0;
+  }
+
+  .cal-nav {
+    width: 100%;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .cal-nav button {
+    width: 34px;
+    height: 34px;
+  }
+
+  #cal-today-btn {
+    min-width: 58px;
+    padding: 0 9px;
+  }
+
+  #cal-label {
+    min-width: 76px;
+  }
+
+  .cal-grid {
+    border-radius: 10px;
+  }
+
+  .cal-weekday {
+    font-size: 10.5px;
+    padding: 7px 0;
+  }
+
+  .cal-cell {
+    min-height: 58px;
+    padding: 4px;
+  }
+
+  .cal-daynum {
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+
+  .cal-entry {
+    font-size: 9px;
+    line-height: 1.35;
+  }
+
+  .xl {
+    border-radius: 8px;
+  }
+
+  .xl__table {
+    font-size: 12px;
+  }
+
+  .xl__table th,
+  .xl__table td {
+    padding: 7px 8px;
+  }
+
+  .rbox {
+    padding: 34px 12px 24px;
+  }
+
+  .rbox--answer .rbox__v {
+    font-size: 20px;
+  }
+
+  .foot {
+    padding: 16px 8px 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .navbar-tabs a {
+    font-size: 11.5px;
+    padding-inline: 9px;
+  }
+
+  .hero-content {
+    padding-inline: 12px;
+  }
+
+  .hero-badges {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dashboard {
+    padding-inline: 10px;
+  }
+
+  .cal-cell {
+    min-height: 54px;
+    padding-inline: 3px;
+  }
+
+  .cal-entry {
+    font-size: 8.5px;
+  }
+}
+
+
+/* ── Search input blinking caret ── */
+.hero .search-card input {
+  caret-color: #2563eb;
+}
+
+.search-caret {
+  position: absolute;
+  left: 22px;
+  top: 50%;
+  width: 2px;
+  height: 21px;
+  border-radius: 2px;
+  background: #2563eb;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero .search-card input:placeholder-shown:not(:focus) {
+  padding-left: 16px;
+}
+
+.hero .search-card input:placeholder-shown:not(:focus) + .search-caret {
+  opacity: 1;
+  animation: search-caret-blink 1.05s steps(1, end) infinite;
+}
+
+@keyframes search-caret-blink {
+  0%, 48% { opacity: 1; }
+  49%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero .search-card input:placeholder-shown:not(:focus) + .search-caret {
+    animation: none;
+    opacity: .55;
+  }
+}
