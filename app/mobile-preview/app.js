@@ -72,82 +72,151 @@ function xlTable(divider, headers, rows) {
   const nextBtn = document.getElementById("cal-next");
   const todayBtn = document.getElementById("cal-today-btn");
   const calTooltip = document.getElementById("cal-tooltip");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   let focusName = null;   // 검색된 이름
   let focusDate = null;   // 그 사람의 가장 최근 당직일
+  let renderToken = 0;
+  const monthMarkupCache = new Map();
 
   function ymKey(y, m) { return `${y}-${pad2(m + 1)}`; }
 
-  function wireCalTooltip() {
-    grid.querySelectorAll(".cal-entry").forEach((entry) => {
-      entry.addEventListener("mouseenter", () => {
-        calTooltip.textContent = entry.dataset.full;
-        calTooltip.classList.add("show");
-      });
-      entry.addEventListener("mousemove", (e) => {
-        const wrapRect = grid.parentElement.getBoundingClientRect();
-        calTooltip.style.left = e.clientX - wrapRect.left + "px";
-        calTooltip.style.top = e.clientY - wrapRect.top + "px";
-      });
-      entry.addEventListener("mouseleave", () => calTooltip.classList.remove("show"));
-    });
-  }
+  // 매번 모든 일정 요소에 이벤트를 다시 붙이지 않고 캘린더 루트에서 한 번만 처리한다.
+  let tooltipEntry = null;
+  grid.addEventListener("mouseover", (e) => {
+    const entry = e.target.closest(".cal-entry");
+    if (!entry || !grid.contains(entry) || entry === tooltipEntry) return;
+    tooltipEntry = entry;
+    calTooltip.textContent = entry.dataset.full || "";
+    calTooltip.classList.add("show");
+  });
 
-  function renderCalendar() {
-    const key = ymKey(calYear, calMonth);
-    label.textContent = `${calYear}년 ${calMonth + 1}월`;
-    prevBtn.disabled = key <= minKey;
-    nextBtn.disabled = key >= maxKey;
+  grid.addEventListener("mousemove", (e) => {
+    if (!tooltipEntry) return;
+    const wrapRect = grid.parentElement.getBoundingClientRect();
+    calTooltip.style.left = e.clientX - wrapRect.left + "px";
+    calTooltip.style.top = e.clientY - wrapRect.top + "px";
+  });
+
+  grid.addEventListener("mouseout", (e) => {
+    if (!tooltipEntry) return;
+    const next = e.relatedTarget;
+    if (next && tooltipEntry.contains(next)) return;
+    tooltipEntry = null;
+    calTooltip.classList.remove("show");
+  });
+
+  function buildCalendarMarkup(key) {
+    const cacheKey = `${key}|${focusName || ""}|${focusDate || ""}`;
+    const cached = monthMarkupCache.get(cacheKey);
+    if (cached) return cached;
 
     const startWeekday = new Date(calYear, calMonth, 1).getDay();
     const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
     const totalCells = Math.ceil((startWeekday + daysInMonth) / 7) * 7;
 
-    const headerHtml = WEEKDAYS.map((w) => `<div class="cal-weekday">${w}</div>`).join("");
+    const headerHtml = WEEKDAYS.map((w, weekday) => {
+      const cls = ["cal-weekday"];
+      if (weekday === 0) cls.push("cal-weekday--sun");
+      if (weekday === 6) cls.push("cal-weekday--sat");
+      return `<div class="${cls.join(" ")}">${w}</div>`;
+    }).join("");
+
     const cellsHtml = Array.from({ length: totalCells }, (_, i) => {
       const dayNum = i - startWeekday + 1;
       const inMonth = dayNum >= 1 && dayNum <= daysInMonth;
       if (!inMonth) return `<div class="cal-cell cal-cell--muted"></div>`;
+
       const date = `${key}-${pad2(dayNum)}`;
       const byType = byDate.get(date) || new Map();
       const isToday = date === todayIso;
       const hasFocusName = focusName && [...byType.values()].some((rs) => rs.some((r) => r.name === focusName));
       const isFocusLatest = date === focusDate;
+      const weekday = i % 7;
+
       const entriesHtml = [...byType.entries()]
         .map(([type, records]) => {
           const icon = type === "숙직" ? "🌙" : "☀️";
           const rest = records.length > 1 ? ` 외 ${records.length - 1}명` : "";
           const fullList = records.map((r) => `${r.name}(${r.role})`).join(", ");
-          // 검색된 사람이 포함된 날은 그 사람을 대표로 표시
           const lead = focusName && records.some((r) => r.name === focusName) ? focusName : records[0].name;
           return `<div class="cal-entry" data-full="${fullList}">${icon} ${lead}${rest}</div>`;
         })
         .join("");
+
       const cls = ["cal-cell"];
+      if (weekday === 0) cls.push("cal-cell--sun");
+      if (weekday === 6) cls.push("cal-cell--sat");
       if (isToday) cls.push("cal-cell--today");
       if (hasFocusName) cls.push("cal-cell--mine");
       if (isFocusLatest) cls.push("cal-cell--latest");
+
       return `<div class="${cls.join(" ")}"><div class="cal-daynum">${dayNum}</div>${entriesHtml}</div>`;
     }).join("");
 
-    grid.innerHTML = `<div class="cal-grid">${headerHtml}${cellsHtml}</div>`;
-    wireCalTooltip();
+    const markup = `<div class="cal-grid">${headerHtml}${cellsHtml}</div>`;
+    monthMarkupCache.set(cacheKey, markup);
+    return markup;
+  }
+
+  function commitCalendar(markup, animate, direction) {
+    grid.innerHTML = markup;
+    grid.setAttribute("aria-busy", "false");
+
+    if (!animate || reduceMotion.matches) return;
+    const calendar = grid.firstElementChild;
+    if (!calendar || typeof calendar.animate !== "function") return;
+
+    const offset = direction < 0 ? "-8px" : direction > 0 ? "8px" : "0px";
+    calendar.animate(
+      [
+        { opacity: 0.72, transform: `translateX(${offset})` },
+        { opacity: 1, transform: "translateX(0)" }
+      ],
+      { duration: 115, easing: "cubic-bezier(.2,.7,.2,1)" }
+    );
+  }
+
+  function renderCalendar({ animate = false, direction = 0 } = {}) {
+    const key = ymKey(calYear, calMonth);
+    label.textContent = `${calYear}년 ${calMonth + 1}월`;
+    prevBtn.disabled = key <= minKey;
+    nextBtn.disabled = key >= maxKey;
+
+    const markup = buildCalendarMarkup(key);
+    const token = ++renderToken;
+
+    if (!animate) {
+      commitCalendar(markup, false, 0);
+      return;
+    }
+
+    // 클릭 즉시 월 라벨/버튼은 갱신하고, DOM 교체는 다음 프레임에 모아 처리한다.
+    grid.setAttribute("aria-busy", "true");
+    requestAnimationFrame(() => {
+      if (token !== renderToken) return;
+      commitCalendar(markup, true, direction);
+    });
   }
 
   prevBtn.addEventListener("click", () => {
     calMonth--;
     if (calMonth < 0) { calMonth = 11; calYear--; }
-    renderCalendar();
+    renderCalendar({ animate: true, direction: -1 });
   });
+
   nextBtn.addEventListener("click", () => {
     calMonth++;
     if (calMonth > 11) { calMonth = 0; calYear++; }
-    renderCalendar();
+    renderCalendar({ animate: true, direction: 1 });
   });
+
   todayBtn.addEventListener("click", () => {
+    const currentKey = ymKey(calYear, calMonth);
+    const direction = startYM > currentKey ? 1 : startYM < currentKey ? -1 : 0;
     calYear = parseInt(startYM.slice(0, 4), 10);
     calMonth = parseInt(startYM.slice(5, 7), 10) - 1;
-    renderCalendar();
+    renderCalendar({ animate: true, direction });
   });
 
   // 이름 검색 시 그 사람의 가장 최근 당직일로 이동 + 하이라이트
@@ -162,6 +231,8 @@ function xlTable(divider, headers, rows) {
         calMonth = parseInt(focusDate.slice(5, 7), 10) - 1;
       }
     }
+
+    // 검색 결과 이동은 즉시 그려야 하므로 비동기 월 전환 애니메이션을 사용하지 않는다.
     renderCalendar();
     if (focusDate) {
       const cell = grid.querySelector(".cal-cell--latest");

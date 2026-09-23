@@ -1083,3 +1083,49 @@ body::before {
     animation: none;
   }
 }
+
+/* ── Calendar speed + weekend styling v1 ── */
+#calendar-grid {
+  min-width: 0;
+}
+
+#calendar-grid .cal-grid {
+  contain: layout paint;
+  will-change: transform, opacity;
+}
+
+.cal-weekday--sun {
+  color: #c94a55;
+  background: #fff6f7;
+}
+
+.cal-weekday--sat {
+  color: #3f6fc4;
+  background: #f4f7ff;
+}
+
+.cal-cell--sun:not(.cal-cell--mine):not(.cal-cell--latest) {
+  background: #fffafa;
+}
+
+.cal-cell--sat:not(.cal-cell--mine):not(.cal-cell--latest) {
+  background: #f8faff;
+}
+
+.cal-cell--sun:not(.cal-cell--latest) .cal-daynum {
+  color: #c94a55;
+}
+
+.cal-cell--sat:not(.cal-cell--latest) .cal-daynum {
+  color: #3f6fc4;
+}
+
+#calendar-grid[aria-busy="true"] {
+  cursor: progress;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #calendar-grid .cal-grid {
+    will-change: auto;
+  }
+}
