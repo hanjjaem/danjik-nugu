@@ -64,15 +64,14 @@ body::before {
 .hero-eyebrow { font-size: 13px; font-weight: 700; color: #cbd8f5; letter-spacing: -.01em; margin-bottom: 10px; }
 .hero-title {
   font-size: clamp(36px, 6vw, 52px); font-weight: 950; letter-spacing: -.03em; margin-bottom: 10px;
-  /* 동구 슬로건 계열의 마젠타 → 바이올렛 그라데이션 */
-  background: linear-gradient(100deg, #f43bb0 0%, #e43bc4 34%, #bf47dd 66%, #9355ef 100%);
+  background: linear-gradient(100deg, #ffffff 0%, #d9edff 24%, #b9c7ff 48%, #c5a6ff 70%, #ff9fcb 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
-  /* 흰색 버퍼를 먼저 깔고 그 위에 공식색 그라데이션을 올린다. */
-  -webkit-text-stroke: 2.4px rgba(255, 255, 255, .96);
-  paint-order: stroke fill;
+  -webkit-text-stroke: .25px rgba(255, 255, 255, .18);
   filter:
-    drop-shadow(0 2px 2px rgba(20, 10, 40, .58))
-    drop-shadow(0 5px 12px rgba(20, 10, 40, .34));
+    drop-shadow(0 2px 3px rgba(10, 6, 30, .88))
+    drop-shadow(0 7px 20px rgba(10, 6, 30, .58))
+    drop-shadow(0 0 12px rgba(145, 160, 255, .34))
+    drop-shadow(0 0 24px rgba(238, 112, 180, .16));
 }
 .hero-eyebrow, .hero-sub { text-shadow: 0 1px 8px rgba(0, 0, 0, .4); }
 .hero-sub { font-size: 14.5px; color: #dbe4fb; margin-bottom: 24px; line-height: 1.6; }
@@ -1365,12 +1364,5 @@ body::before {
 
   .cal-count {
     display: none;
-  }
-}
-
-/* ── Hero title white buffer mobile tuning v1 ── */
-@media (max-width: 640px) {
-  .hero-title {
-    -webkit-text-stroke-width: 1.8px;
   }
 }
