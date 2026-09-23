@@ -926,3 +926,10 @@ body::before {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+
+/* ── Mobile search result scroll fix v1 ── */
+@media (max-width: 640px) {
+  #calendar {
+    scroll-margin-top: 52px;
+  }
+}

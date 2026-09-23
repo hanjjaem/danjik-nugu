@@ -268,6 +268,18 @@ nameInput.addEventListener("input", () => {
   }
   window.focusCalendarOnPerson(name);
 
+  // 모바일에서는 키보드가 열린 상태에서 scrollIntoView가 가시 영역을 잘못 계산할 수 있다.
+  // 정확한 이름이 검색되면 키보드를 닫은 뒤 캘린더 섹션을 화면 상단으로 이동한다.
+  if (document.activeElement === nameInput) {
+    nameInput.blur();
+  }
+  window.setTimeout(() => {
+    const calendarSection = document.getElementById("calendar");
+    if (calendarSection) {
+      calendarSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, 260);
+
   const dates = records.map((r) => r.date).sort();
   const intervals = [];
   for (let i = 1; i < dates.length; i++) {
