@@ -81,6 +81,22 @@ function xlTable(divider, headers, rows) {
 
   function ymKey(y, m) { return `${y}-${pad2(m + 1)}`; }
 
+  function dutyTypeIcon(type) {
+    if (type === "숙직") {
+      return `<span class="cal-duty-icon cal-duty-icon--night" aria-hidden="true">
+        <svg viewBox="0 0 16 16" focusable="false">
+          <path d="M10.9 12.9A5.7 5.7 0 0 1 5.1 3.4a5.9 5.9 0 1 0 5.8 9.5Z"></path>
+        </svg>
+      </span>`;
+    }
+    return `<span class="cal-duty-icon cal-duty-icon--day" aria-hidden="true">
+      <svg viewBox="0 0 16 16" focusable="false">
+        <circle cx="8" cy="8" r="2.8"></circle>
+        <path d="M8 1.2v1.6M8 13.2v1.6M1.2 8h1.6M13.2 8h1.6M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M12.8 3.2l-1.1 1.1M4.3 11.7l-1.1 1.1"></path>
+      </svg>
+    </span>`;
+  }
+
   // 매번 모든 일정 요소에 이벤트를 다시 붙이지 않고 캘린더 루트에서 한 번만 처리한다.
   let tooltipEntry = null;
   grid.addEventListener("mouseover", (e) => {
@@ -136,22 +152,31 @@ function xlTable(divider, headers, rows) {
 
       const entriesHtml = [...byType.entries()]
         .map(([type, records]) => {
-          const icon = type === "숙직" ? "🌙" : "☀️";
-          const rest = records.length > 1 ? ` 외 ${records.length - 1}명` : "";
+          const icon = dutyTypeIcon(type);
+          const countBadge = records.length > 1
+            ? `<span class="cal-count" aria-label="추가 ${records.length - 1}명">+${records.length - 1}</span>`
+            : "";
           const fullList = records.map((r) => `${r.name}(${r.role})`).join(", ");
           const lead = focusName && records.some((r) => r.name === focusName) ? focusName : records[0].name;
-          return `<div class="cal-entry" data-full="${fullList}">${icon} ${lead}${rest}</div>`;
+          return `<div class="cal-entry" data-full="${fullList}" aria-label="${fullList}">
+            ${icon}<span class="cal-entry__name">${lead}</span>${countBadge}
+          </div>`;
         })
         .join("");
 
       const cls = ["cal-cell"];
       if (weekday === 0) cls.push("cal-cell--sun");
       if (weekday === 6) cls.push("cal-cell--sat");
+      if (byType.size === 0) cls.push("cal-cell--empty");
       if (isToday) cls.push("cal-cell--today");
       if (hasFocusName) cls.push("cal-cell--mine");
       if (isFocusLatest) cls.push("cal-cell--latest");
 
-      return `<div class="${cls.join(" ")}"><div class="cal-daynum">${dayNum}</div>${entriesHtml}</div>`;
+      const todayChip = isToday ? '<span class="cal-today-chip">오늘</span>' : "";
+      return `<div class="${cls.join(" ")}">
+        <div class="cal-datehead"><div class="cal-daynum">${dayNum}</div>${todayChip}</div>
+        ${entriesHtml}
+      </div>`;
     }).join("");
 
     const markup = `<div class="cal-grid">${headerHtml}${cellsHtml}</div>`;

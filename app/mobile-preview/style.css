@@ -1134,3 +1134,235 @@ body::before {
     will-change: auto;
   }
 }
+
+/* ── Calendar visual polish v2 ── */
+/* Header stays structurally neutral; only weekend labels carry semantic color. */
+.cal-weekday {
+  background: #f6f8fb;
+  color: #7f8da3;
+  font-weight: 900;
+  letter-spacing: .01em;
+  padding: 10px 0;
+}
+
+.cal-weekday--sun {
+  background: #f6f8fb;
+  color: #bd3342;
+}
+
+.cal-weekday--sat {
+  background: #f6f8fb;
+  color: #315cae;
+}
+
+/* Softer grid makes the calendar feel less like a spreadsheet. */
+.cal-grid {
+  gap: 1px;
+  background: #edf1f6;
+  border-color: #e8edf3;
+  box-shadow: 0 8px 24px rgba(31, 56, 88, .035);
+}
+
+.cal-cell {
+  min-height: 82px;
+  padding: 7px 9px;
+}
+
+.cal-cell--muted {
+  background: #f8fafc;
+}
+
+.cal-cell--empty:not(.cal-cell--sun):not(.cal-cell--sat):not(.cal-cell--mine):not(.cal-cell--latest):not(.cal-cell--today) {
+  background: #fbfcfe;
+}
+
+/* Weekend columns stay clearly identifiable without coloring the header background. */
+.cal-cell--sun:not(.cal-cell--mine):not(.cal-cell--latest):not(.cal-cell--today) {
+  background: #fff1f3;
+}
+
+.cal-cell--sat:not(.cal-cell--mine):not(.cal-cell--latest):not(.cal-cell--today) {
+  background: #eef3ff;
+}
+
+/* Today is a semantic marker, not a heavy focus ring. */
+.cal-cell--today:not(.cal-cell--mine):not(.cal-cell--latest) {
+  background: #f3f7ff;
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, .16);
+}
+
+.cal-datehead {
+  min-height: 18px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.cal-daynum {
+  margin-bottom: 0;
+  color: #41516a;
+  font-size: 12.5px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.cal-cell--sun:not(.cal-cell--latest) .cal-daynum {
+  color: #bd3342;
+}
+
+.cal-cell--sat:not(.cal-cell--latest) .cal-daynum {
+  color: #315cae;
+}
+
+.cal-today-chip {
+  flex: 0 0 auto;
+  padding: 2px 5px;
+  border: 1px solid rgba(37, 99, 235, .16);
+  border-radius: 999px;
+  background: rgba(37, 99, 235, .09);
+  color: #2563eb;
+  font-size: 8.5px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+
+.cal-entry {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 4px;
+  color: #40506a;
+  font-size: 10.8px;
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+.cal-entry__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cal-count {
+  flex: 0 0 auto;
+  min-width: 20px;
+  padding: 1px 4px;
+  border-radius: 999px;
+  background: rgba(100, 116, 139, .10);
+  color: #6b7a90;
+  font-size: 8.5px;
+  font-weight: 850;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.cal-duty-icon {
+  flex: 0 0 12px;
+  width: 12px;
+  height: 12px;
+  display: inline-grid;
+  place-items: center;
+}
+
+.cal-duty-icon svg {
+  width: 12px;
+  height: 12px;
+  overflow: visible;
+}
+
+.cal-duty-icon--night {
+  color: #e6a11b;
+}
+
+.cal-duty-icon--night path {
+  fill: currentColor;
+}
+
+.cal-duty-icon--day {
+  color: #e8a317;
+}
+
+.cal-duty-icon--day circle {
+  fill: currentColor;
+}
+
+.cal-duty-icon--day path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+}
+
+/* Search highlight still wins over ordinary weekend/today treatment. */
+.cal-cell--mine {
+  background: #eef4ff;
+}
+
+.cal-cell--latest {
+  background: #fff3d6;
+  box-shadow: inset 0 0 0 2px #f59e0b;
+}
+
+@media (max-width: 640px) {
+  .cal-weekday {
+    padding: 8px 0;
+    font-size: 10.5px;
+  }
+
+  .cal-cell {
+    min-height: 58px;
+    padding: 4px;
+  }
+
+  .cal-datehead {
+    min-height: 14px;
+    margin-bottom: 2px;
+    gap: 2px;
+  }
+
+  .cal-daynum {
+    font-size: 11px;
+  }
+
+  .cal-today-chip {
+    padding: 1px 3px;
+    font-size: 7px;
+  }
+
+  .cal-entry {
+    gap: 2px;
+    font-size: 8.8px;
+    line-height: 1.35;
+  }
+
+  .cal-duty-icon {
+    flex-basis: 9px;
+    width: 9px;
+    height: 9px;
+  }
+
+  .cal-duty-icon svg {
+    width: 9px;
+    height: 9px;
+  }
+
+  .cal-count {
+    min-width: 16px;
+    padding: 0 3px;
+    font-size: 7px;
+  }
+}
+
+@media (max-width: 380px) {
+  .cal-entry {
+    font-size: 8.2px;
+  }
+
+  .cal-count {
+    display: none;
+  }
+}
