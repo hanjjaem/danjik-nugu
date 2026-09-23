@@ -11,7 +11,7 @@
 <nav class="navbar-tabs">
     <a href="#today">오늘 당직</a>
     <a href="#calendar">당직 일정</a>
-    <a href="#my-duty" id="my-duty-nav">당직 이력</a>
+    <a href="#my-duty" id="my-duty-nav" data-my-duty-trigger>당직 이력</a>
     <a href="#stats">당직 통계</a>
   </nav>
 </header>
@@ -27,9 +27,9 @@
       <span class="search-caret" aria-hidden="true"></span>
     </div>
     <div class="hero-badges">
-      <a href="#today">🕐 오늘</a>
-      <a href="#dashboard">📅 당직 일정</a>
-      <a href="#calendar">📅 이번 주 당직</a>
+      <a href="#today">🕐 오늘 당직</a>
+      <a href="#calendar">📅 당직 일정</a>
+      <a href="#my-duty" data-my-duty-trigger>🧾 당직 이력</a>
       <a href="#stats">📊 당직 통계</a>
     </div>
   </div>
@@ -91,7 +91,7 @@
 </main>
 
 <script src="../data.js?v=20260923-1805"></script>
-<script src="app.js?v=20260923-mydutyux1"></script>
+<script src="app.js?v=20260923-labelsync1"></script>
 </body>
 </html>
 
