@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>당직누구</title>
-<link rel="stylesheet" href="style.css?v=20260923-calendarpolish2">
+<link rel="stylesheet" href="style.css?v=20260923-titlesize3">
 </head>
 <body>
 <header class="navbar">
@@ -20,14 +20,14 @@
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <p class="hero-eyebrow">부산광역시 동구 · 오늘도 동구를 지키는 당신이 있습니다</p>
-    <h1 class="hero-title">당직 누구?</h1>
+    <p class="hero-title">당직 누구?</p>
     <p class="hero-sub">이름을 검색하면 당직 이력과 통계를 보여드려요</p>
     <div class="search-card">
-      <input id="name-input" placeholder="이름 검색 (예: 한제림)" aria-label="이름 검색">
+      <input id="name-input" placeholder="이름 검색 (예: 한제림)" aria-label="이름 검색" enterkeyhint="search">
       <span class="search-caret" aria-hidden="true"></span>
     </div>
     <p class="my-duty-hint" id="my-duty-hint" role="status" aria-live="polite">
-      이름을 입력하면 당직 이력을 확인할 수 있어요
+      이름을 입력하고 Enter를 누르면 당직 이력으로 이동해요
     </p>
     <div class="hero-badges">
       <a href="#today">🕐 오늘 당직</a>
@@ -94,6 +94,6 @@
 </main>
 
 <script src="data.js?v=20260923-production2"></script>
-<script src="app.js?v=20260923-calendarpolish2"></script>
+<script src="app.js?v=20260923-calendarnodecache1"></script>
 </body>
 </html>

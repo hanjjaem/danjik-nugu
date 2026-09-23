@@ -63,15 +63,16 @@ body::before {
 .hero-content { position: relative; z-index: 1; width: min(100%, 640px); padding: 48px 20px; text-align: center; color: #fff; }
 .hero-eyebrow { font-size: 13px; font-weight: 700; color: #cbd8f5; letter-spacing: -.01em; margin-bottom: 10px; }
 .hero-title {
-  font-size: clamp(36px, 6vw, 52px); font-weight: 950; letter-spacing: -.03em; margin-bottom: 10px;
-  background: linear-gradient(100deg, #ffffff 0%, #d9edff 24%, #b9c7ff 48%, #c5a6ff 70%, #ff9fcb 100%);
+  width: fit-content; margin: 0 auto 10px;
+  font-size: clamp(60px, calc(3.7vw + 10px), 100px); font-weight: 950; letter-spacing: -.03em;
+  background: linear-gradient(105deg, #ff3da5 0%, #e43ed6 48%, #8957f5 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
-  -webkit-text-stroke: .25px rgba(255, 255, 255, .18);
   filter:
-    drop-shadow(0 2px 3px rgba(10, 6, 30, .88))
-    drop-shadow(0 7px 20px rgba(10, 6, 30, .58))
-    drop-shadow(0 0 12px rgba(145, 160, 255, .34))
-    drop-shadow(0 0 24px rgba(238, 112, 180, .16));
+    drop-shadow(0 0 5px rgba(255, 255, 255, 1))
+    drop-shadow(0 0 1px rgba(255, 255, 255, .9))
+    drop-shadow(0 0 0.5px rgba(255, 255, 255, .45))
+    drop-shadow(0 3px 0.5px rgba(10, 6, 30, .72))
+    drop-shadow(0 20px 16px rgba(10, 6, 30, .46));
 }
 .hero-eyebrow, .hero-sub { text-shadow: 0 1px 8px rgba(0, 0, 0, .4); }
 .hero-sub { font-size: 14.5px; color: #dbe4fb; margin-bottom: 24px; line-height: 1.6; }
@@ -310,7 +311,7 @@ body::before {
   }
 
   .hero-title {
-    font-size: clamp(34px, 12vw, 46px);
+    font-size: clamp(48px, calc(4vw + 35px), 62px);
   }
 
   .hero-sub {
@@ -1089,14 +1090,13 @@ body::before {
   }
 }
 
-/* ── Calendar speed + weekend styling v1 ── */
+/* ── Calendar layout + weekend styling ── */
 #calendar-grid {
   min-width: 0;
 }
 
 #calendar-grid .cal-grid {
   contain: layout paint;
-  will-change: transform, opacity;
 }
 
 .cal-weekday--sun {
@@ -1125,70 +1125,73 @@ body::before {
   color: #315cae;
 }
 
-#calendar-grid[aria-busy="true"] {
-  cursor: progress;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #calendar-grid .cal-grid {
-    will-change: auto;
-  }
-}
-
 /* ── Calendar visual polish v2 ── */
 /* Header stays structurally neutral; only weekend labels carry semantic color. */
 .cal-weekday {
-  background: #f6f8fb;
-  color: #7f8da3;
+  background: #e9eef5;
+  color: #59677d;
   font-weight: 900;
   letter-spacing: .01em;
   padding: 10px 0;
 }
 
 .cal-weekday--sun {
-  background: #f6f8fb;
+  background: #e9eef5;
   color: #bd3342;
 }
 
 .cal-weekday--sat {
-  background: #f6f8fb;
+  background: #e9eef5;
   color: #315cae;
 }
 
-/* Softer grid makes the calendar feel less like a spreadsheet. */
+/* Let the week rows organize the calendar without boxing in every day. */
 .cal-grid {
-  gap: 1px;
-  background: #edf1f6;
-  border-color: #e8edf3;
-  box-shadow: 0 8px 24px rgba(31, 56, 88, .035);
+  gap: 0;
+  background: #fff;
+  border-color: #e6ebf2;
+  border-radius: 16px;
+  box-shadow: 0 16px 42px rgba(31, 56, 88, .07);
+  /* Keep the page below the calendar still when months have five or six weeks. */
+  height: 525px;
+  grid-template-rows: 33px;
+  grid-auto-rows: minmax(0, 1fr);
 }
 
 .cal-cell {
   min-height: 82px;
-  padding: 7px 9px;
+  padding: 9px 11px;
+  border-top: 1px solid #eef1f5;
+}
+
+.cal-cell:not(:nth-child(7n + 1)) {
+  border-left: 1px solid #dce3ed;
 }
 
 .cal-cell--muted {
-  background: #f8fafc;
+  background: #fafbfe;
 }
 
 .cal-cell--empty:not(.cal-cell--sun):not(.cal-cell--sat):not(.cal-cell--mine):not(.cal-cell--latest):not(.cal-cell--today) {
-  background: #fbfcfe;
+  background: #fff;
 }
 
-/* Weekend columns stay clearly identifiable without coloring the header background. */
-.cal-cell--sun:not(.cal-cell--mine):not(.cal-cell--latest):not(.cal-cell--today) {
-  background: #fff1f3;
+/* Soft weekend tints keep the columns distinct without restoring cell borders. */
+.cal-cell--sun:not(.cal-cell--mine):not(.cal-cell--latest) {
+  background: #fff5f6;
 }
 
-.cal-cell--sat:not(.cal-cell--mine):not(.cal-cell--latest):not(.cal-cell--today) {
-  background: #eef3ff;
-}
-
-/* Today is a semantic marker, not a heavy focus ring. */
-.cal-cell--today:not(.cal-cell--mine):not(.cal-cell--latest) {
+.cal-cell--sat:not(.cal-cell--mine):not(.cal-cell--latest) {
   background: #f3f7ff;
-  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, .16);
+}
+
+/* The date and label mark today without outlining its whole cell. */
+.cal-cell--today:not(.cal-cell--mine):not(.cal-cell--latest) {
+  box-shadow: none;
+}
+
+.cal-cell--today:not(.cal-cell--latest) .cal-daynum {
+  color: #2563eb;
 }
 
 .cal-datehead {
@@ -1308,6 +1311,11 @@ body::before {
 }
 
 @media (max-width: 640px) {
+  .cal-grid {
+    height: 380px;
+    grid-template-rows: 28px;
+  }
+
   .cal-weekday {
     padding: 8px 0;
     font-size: 10.5px;

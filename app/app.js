@@ -72,12 +72,10 @@ function xlTable(divider, headers, rows) {
   const nextBtn = document.getElementById("cal-next");
   const todayBtn = document.getElementById("cal-today-btn");
   const calTooltip = document.getElementById("cal-tooltip");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   let focusName = null;   // 검색된 이름
   let focusDate = null;   // 그 사람의 가장 최근 당직일
-  let renderToken = 0;
-  const monthMarkupCache = new Map();
+  const monthNodeCache = new Map();
 
   function ymKey(y, m) { return `${y}-${pad2(m + 1)}`; }
 
@@ -123,10 +121,6 @@ function xlTable(divider, headers, rows) {
   });
 
   function buildCalendarMarkup(key) {
-    const cacheKey = `${key}|${focusName || ""}|${focusDate || ""}`;
-    const cached = monthMarkupCache.get(cacheKey);
-    if (cached) return cached;
-
     const startWeekday = new Date(calYear, calMonth, 1).getDay();
     const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
     const totalCells = Math.ceil((startWeekday + daysInMonth) / 7) * 7;
@@ -179,69 +173,53 @@ function xlTable(divider, headers, rows) {
       </div>`;
     }).join("");
 
-    const markup = `<div class="cal-grid">${headerHtml}${cellsHtml}</div>`;
-    monthMarkupCache.set(cacheKey, markup);
-    return markup;
+    return `<div class="cal-grid">${headerHtml}${cellsHtml}</div>`;
   }
 
-  function commitCalendar(markup, animate, direction) {
-    grid.innerHTML = markup;
-    grid.setAttribute("aria-busy", "false");
-
-    if (!animate || reduceMotion.matches) return;
-    const calendar = grid.firstElementChild;
-    if (!calendar || typeof calendar.animate !== "function") return;
-
-    const offset = direction < 0 ? "-8px" : direction > 0 ? "8px" : "0px";
-    calendar.animate(
-      [
-        { opacity: 0.72, transform: `translateX(${offset})` },
-        { opacity: 1, transform: "translateX(0)" }
-      ],
-      { duration: 115, easing: "cubic-bezier(.2,.7,.2,1)" }
-    );
+  function getCalendarNode(key) {
+    const cacheKey = `${key}|${focusName || ""}|${focusDate || ""}`;
+    let node = monthNodeCache.get(cacheKey);
+    if (node) {
+      monthNodeCache.delete(cacheKey);
+    } else {
+      const template = document.createElement("template");
+      template.innerHTML = buildCalendarMarkup(key);
+      node = template.content.firstElementChild;
+    }
+    monthNodeCache.set(cacheKey, node);
+    if (monthNodeCache.size > 3) {
+      monthNodeCache.delete(monthNodeCache.keys().next().value);
+    }
+    return node;
   }
 
-  function renderCalendar({ animate = false, direction = 0 } = {}) {
+  function renderCalendar() {
     const key = ymKey(calYear, calMonth);
     label.textContent = `${calYear}년 ${calMonth + 1}월`;
     prevBtn.disabled = key <= minKey;
     nextBtn.disabled = key >= maxKey;
-
-    const markup = buildCalendarMarkup(key);
-    const token = ++renderToken;
-
-    if (!animate) {
-      commitCalendar(markup, false, 0);
-      return;
-    }
-
-    // 클릭 즉시 월 라벨/버튼은 갱신하고, DOM 교체는 다음 프레임에 모아 처리한다.
-    grid.setAttribute("aria-busy", "true");
-    requestAnimationFrame(() => {
-      if (token !== renderToken) return;
-      commitCalendar(markup, true, direction);
-    });
+    const calendarNode = getCalendarNode(key);
+    if (grid.firstElementChild !== calendarNode) grid.replaceChildren(calendarNode);
+    tooltipEntry = null;
+    calTooltip.classList.remove("show");
   }
 
   prevBtn.addEventListener("click", () => {
     calMonth--;
     if (calMonth < 0) { calMonth = 11; calYear--; }
-    renderCalendar({ animate: true, direction: -1 });
+    renderCalendar();
   });
 
   nextBtn.addEventListener("click", () => {
     calMonth++;
     if (calMonth > 11) { calMonth = 0; calYear++; }
-    renderCalendar({ animate: true, direction: 1 });
+    renderCalendar();
   });
 
   todayBtn.addEventListener("click", () => {
-    const currentKey = ymKey(calYear, calMonth);
-    const direction = startYM > currentKey ? 1 : startYM < currentKey ? -1 : 0;
     calYear = parseInt(startYM.slice(0, 4), 10);
     calMonth = parseInt(startYM.slice(5, 7), 10) - 1;
-    renderCalendar({ animate: true, direction });
+    renderCalendar();
   });
 
   // 이름 검색 시 그 사람의 가장 최근 당직일로 이동 + 하이라이트
@@ -257,12 +235,7 @@ function xlTable(divider, headers, rows) {
       }
     }
 
-    // 검색 결과 이동은 즉시 그려야 하므로 비동기 월 전환 애니메이션을 사용하지 않는다.
     renderCalendar();
-    if (focusDate) {
-      const cell = grid.querySelector(".cal-cell--latest");
-      if (cell) cell.scrollIntoView({ block: "nearest" });
-    }
   };
 
   renderCalendar();
@@ -344,6 +317,7 @@ function wireChartTooltip() {
 
 let highlightedName = null;
 let matchedName = null;
+let lastRenderedName = null;
 
 const emptySummary = '<p class="dash-empty">이름을 검색하면 총 당직 횟수와 평균 대비가 여기 표시됩니다.</p>';
 const emptyChart = '<p class="dash-empty">이름을 검색하면 월별 당직 그래프가 여기 표시됩니다.</p>';
@@ -388,41 +362,32 @@ myDutyTriggers.forEach((trigger) => {
   });
 });
 
-nameInput.addEventListener("input", () => {
+function updateNameSearch() {
   const name = nameInput.value.trim();
+  if (name === lastRenderedName) return;
+  lastRenderedName = name;
   highlightedName = name || null;
   if (!name) {
+    if (matchedName) window.focusCalendarOnPerson(null);
     matchedName = null;
     summaryCard.innerHTML = emptySummary;
     chartCardSlot.innerHTML = emptyChart;
     historySection.innerHTML = "";
-    renderStatsTable();
-    window.focusCalendarOnPerson(null);
+    updateStatsHighlight();
     return;
   }
   const records = DUTY_DATA.filter((r) => r.name === name);
   if (records.length === 0) {
+    if (matchedName) window.focusCalendarOnPerson(null);
     matchedName = null;
     summaryCard.innerHTML = '<p class="dash-empty">해당 이름의 당직 기록이 없습니다.</p>';
     chartCardSlot.innerHTML = emptyChart;
     historySection.innerHTML = "";
-    renderStatsTable();
-    window.focusCalendarOnPerson(null);
+    updateStatsHighlight();
     return;
   }
+  if (matchedName !== name) window.focusCalendarOnPerson(name);
   matchedName = name;
-  window.focusCalendarOnPerson(name);
-
-  // 정확한 이름이 검색되면 키보드를 닫고 개인 당직 영역으로 이동한다.
-  // 캘린더의 최근 당직일 하이라이트는 그대로 유지된다.
-  if (document.activeElement === nameInput) {
-    nameInput.blur();
-  }
-  window.setTimeout(() => {
-    if (myDutySection) {
-      myDutySection.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, 260);
 
   const dates = records.map((r) => r.date).sort();
   const intervals = [];
@@ -466,7 +431,19 @@ nameInput.addEventListener("input", () => {
   chartCardSlot.innerHTML = monthlyChartHTML(records);
   historySection.innerHTML = xlTable(`${name}의 당직 이력`, ["날짜", "구분", "직책", "부서"], rows);
   wireChartTooltip();
-  renderStatsTable();
+  updateStatsHighlight();
+}
+
+nameInput.addEventListener("input", (event) => {
+  if (!event.isComposing) updateNameSearch();
+});
+nameInput.addEventListener("compositionend", updateNameSearch);
+nameInput.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" || event.isComposing || event.keyCode === 229 || !nameInput.value.trim()) return;
+  event.preventDefault();
+  updateNameSearch();
+  nameInput.blur();
+  myDutySection.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 // --- 당직 통계 ---
@@ -475,6 +452,16 @@ const statsTable = document.getElementById("stats-table");
 let currentRole = "전체";
 let statsSortKey = "count";
 let statsSortDir = -1;
+let statsRowsByName = new Map();
+let selectedStatsRow = null;
+
+function updateStatsHighlight() {
+  const nextRow = highlightedName ? statsRowsByName.get(highlightedName) : null;
+  if (selectedStatsRow === nextRow) return;
+  selectedStatsRow?.classList.remove("row--selected");
+  nextRow?.classList.add("row--selected");
+  selectedStatsRow = nextRow || null;
+}
 
 function personIntervalStats(role) {
   const filtered = role === "전체" ? DUTY_DATA : DUTY_DATA.filter((r) => r.role === role);
@@ -526,7 +513,6 @@ function renderStatsTable() {
   const ratioOf = (count) => (maxCount === minCount ? 1 : (count - minCount) / (maxCount - minCount));
   const barPct = (count) => Math.round(ratioOf(count) * 100);
 
-  let matchFound = false;
   const rowsHtml = rows.map((r, i) => {
     const countCell = `<div class="mini-bar-wrap"><div class="mini-bar" style="width:${barPct(r.count)}%"></div><span>${r.count}</span></div>`;
     const percentile = Math.max(1, Math.round(((i + 1) / rows.length) * 100));
@@ -542,9 +528,7 @@ function renderStatsTable() {
       r.min !== null ? r.min.toFixed(0) : "-",
       r.max !== null ? r.max.toFixed(0) : "-",
     ];
-    const isMatch = r.name === highlightedName;
-    if (isMatch) matchFound = true;
-    return `<tr class="${isMatch ? "row--selected" : ""}">${cells.map((c) => `<td>${c}</td>`).join("")}</tr>`;
+    return `<tr>${cells.map((c) => `<td>${c}</td>`).join("")}</tr>`;
   });
   const headers = [
     { label: "순위" },
@@ -573,6 +557,12 @@ function renderStatsTable() {
         </table>
       </div>
     </div>`;
+  statsRowsByName = new Map();
+  statsTable.querySelectorAll("tbody tr").forEach((row, i) => {
+    statsRowsByName.set(rows[i].name, row);
+  });
+  selectedStatsRow = null;
+  updateStatsHighlight();
   statsTable.querySelectorAll(".sortable").forEach((th) => {
     th.addEventListener("click", () => {
       const key = th.dataset.key;
@@ -582,10 +572,6 @@ function renderStatsTable() {
     });
   });
 
-  if (matchFound) {
-    const selectedRow = statsTable.querySelector(".row--selected");
-    if (selectedRow) selectedRow.scrollIntoView({ block: "nearest" });
-  }
 }
 
 rolePills.querySelectorAll(".role-pill").forEach((btn) => {
