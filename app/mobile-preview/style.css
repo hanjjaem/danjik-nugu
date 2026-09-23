@@ -499,31 +499,31 @@ body::before {
   }
 }
 
-/* ── Mobile search refinement v3: light glassmorphism ── */
+/* ── Mobile search refinement v4: softer glass ── */
 @media (max-width: 640px) {
   .hero .search-card {
-    width: min(84%, 480px);
+    width: min(78%, 440px);
     margin-inline: auto;
-    padding: 4px 6px 4px 11px;
+    padding: 3px 5px 3px 10px;
     border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, .34);
-    background: rgba(255, 255, 255, .66);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, .18);
+    border: 1px solid rgba(255, 255, 255, .30);
+    background: rgba(255, 255, 255, .52);
+    -webkit-backdrop-filter: blur(14px) saturate(125%);
+    backdrop-filter: blur(14px) saturate(125%);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .14);
   }
 
   .hero .search-card input {
-    height: 40px;
-    font-size: 15px;
+    height: 38px;
+    font-size: 14.5px;
   }
 
   .hero .search-card input::placeholder {
-    color: rgba(57, 72, 94, .72);
+    color: rgba(42, 57, 78, .72);
   }
 
   .search-caret {
-    left: 17px;
-    height: 17px;
+    left: 16px;
+    height: 16px;
   }
 }
