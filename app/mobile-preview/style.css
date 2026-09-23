@@ -439,3 +439,43 @@ body::before {
     font-size: 8.5px;
   }
 }
+
+
+/* ── Search input blinking caret ── */
+.hero .search-card input {
+  caret-color: #2563eb;
+}
+
+.search-caret {
+  position: absolute;
+  left: 22px;
+  top: 50%;
+  width: 2px;
+  height: 21px;
+  border-radius: 2px;
+  background: #2563eb;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero .search-card input:placeholder-shown:not(:focus) {
+  padding-left: 16px;
+}
+
+.hero .search-card input:placeholder-shown:not(:focus) + .search-caret {
+  opacity: 1;
+  animation: search-caret-blink 1.05s steps(1, end) infinite;
+}
+
+@keyframes search-caret-blink {
+  0%, 48% { opacity: 1; }
+  49%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero .search-card input:placeholder-shown:not(:focus) + .search-caret {
+    animation: none;
+    opacity: .55;
+  }
+}
