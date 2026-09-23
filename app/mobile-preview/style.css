@@ -919,3 +919,10 @@ body::before {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+/* ── Mobile restore four-item navbar v1 ── */
+@media (max-width: 640px) {
+  .navbar-tabs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
