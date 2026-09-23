@@ -527,3 +527,25 @@ body::before {
     height: 16px;
   }
 }
+
+/* ── Mobile calendar width fix v1 ── */
+@media (max-width: 640px) {
+  .cal-grid {
+    width: 100%;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .cal-cell {
+    min-width: 0;
+    overflow: hidden;
+    padding: 4px 2px;
+  }
+
+  .cal-entry {
+    min-width: 0;
+    font-size: 8.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
