@@ -576,3 +576,57 @@ body::before {
     box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
   }
 }
+
+/* ── Duty stats role pills v1 ── */
+.role-pills {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.role-pill {
+  appearance: none;
+  border: 1px solid rgba(37, 99, 235, .12);
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: rgba(37, 99, 235, .055);
+  color: #64748b;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+
+.role-pill:hover {
+  border-color: rgba(37, 99, 235, .28);
+  background: rgba(37, 99, 235, .09);
+  color: #334155;
+}
+
+.role-pill.is-active {
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, .20);
+}
+
+@media (max-width: 640px) {
+  #stats .dash-section__head {
+    align-items: flex-start;
+  }
+
+  .role-pills {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .role-pill {
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+}
